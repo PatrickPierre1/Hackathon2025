@@ -81,6 +81,7 @@ class _TurmasPageState extends State<TurmasPage> {
                   itemBuilder: (context, index) {
                     final turma = _filteredTurmas[index];
                     return ListTile(
+                      leading: Icon(Icons.groups, color: Colors.blueAccent),
                       title: Text(turma.nome),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {

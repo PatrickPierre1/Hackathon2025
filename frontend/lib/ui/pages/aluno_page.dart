@@ -62,6 +62,10 @@ class _AlunosPageState extends State<AlunosPage> {
               itemBuilder: (context, index) {
                 final aluno = _filteredAlunos[index];
                 return ListTile(
+                  leading: CircleAvatar(
+                    foregroundColor: Colors.blueAccent,
+                    child: Text(aluno.nome.substring(0, 1).toUpperCase(),)
+                  ),
                   title: Text(aluno.nome),
                   subtitle: Text('RA: ${aluno.ra}'),
                   trailing: const Icon(Icons.arrow_forward_ios),

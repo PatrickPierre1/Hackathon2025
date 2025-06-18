@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/aluno.dart';
+import 'package:frontend/ui/pages/gabaritos_ocr_page.dart';
 import '../../datasources/remote/disciplina_remote.dart';
 import '../../models/disciplina.dart';
 
 class DisciplinasPage extends StatefulWidget {
-  const DisciplinasPage({super.key, required int turmaId, required Aluno aluno});
+
+  final int turmaId;
+  final Aluno aluno;
+
+  const DisciplinasPage({super.key, required this.turmaId, required this.aluno});
 
   @override
   State<DisciplinasPage> createState() => _DisciplinasPageState();
@@ -81,10 +86,16 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
                   itemBuilder: (context, index) {
                     final disciplina = _filteredDisciplinas[index];
                     return ListTile(
+                      leading: Icon(Icons.menu_book, color: Colors.blueAccent),
                       title: Text(disciplina.nome),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
-
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GabaritoOCRPage(alunoId: widget.aluno.id),
+                            ),
+                        );
                       },
                     );
                   },
