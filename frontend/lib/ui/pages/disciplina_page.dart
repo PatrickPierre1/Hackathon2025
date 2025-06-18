@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/aluno.dart';
 import '../../datasources/remote/disciplina_remote.dart';
 import '../../models/disciplina.dart';
 
 class DisciplinasPage extends StatefulWidget {
-  const DisciplinasPage({super.key, required int turmaId});
+  const DisciplinasPage({super.key, required int turmaId, required Aluno aluno});
 
   @override
   State<DisciplinasPage> createState() => _DisciplinasPageState();

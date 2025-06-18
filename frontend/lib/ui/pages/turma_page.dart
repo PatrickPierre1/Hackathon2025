@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/ui/pages/aluno_page.dart';
 import '../../datasources/remote/turma_remote.dart';
 import '../../models/turma.dart';
-import 'disciplina_page.dart';
 
 class TurmasPage extends StatefulWidget {
   const TurmasPage({super.key});
@@ -87,7 +87,7 @@ class _TurmasPageState extends State<TurmasPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DisciplinasPage(turmaId: turma.id),
+                            builder: (context) => AlunosPage(turma: turma,),
                           ),
                         );
                       },
