@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/ui/widgets/custom_appbar.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../datasources/remote/gabarito_remote.dart';
@@ -75,41 +76,77 @@ class _GabaritoOCRPageState extends State<GabaritoOCRPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Leitor de Gabarito')),
+      appBar: const CustomAppBar(title: 'Leitor de Gabarito'),
+      backgroundColor: Colors.grey[100],
       floatingActionButton: respostas.isNotEmpty
           ? FloatingActionButton.extended(
         onPressed: _enviarRespostas,
         icon: const Icon(Icons.send),
         label: const Text('Enviar'),
+        backgroundColor: Colors.blueAccent,
       )
           : null,
       body: Column(
         children: [
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: carregando ? null : _lerImagem,
-            icon: const Icon(Icons.camera_alt),
-            label: const Text('Ler Gabarito com Câmera'),
+          const SizedBox(height: 32),
+          Center(
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent,
+                padding:
+                const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                textStyle: const TextStyle(fontSize: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: carregando ? null : _lerImagem,
+              icon: const Icon(Icons.camera_alt, size: 28, color: Colors.white),
+              label: const Text('Ler Gabarito com Câmera'),
+
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           if (carregando) const CircularProgressIndicator(),
           if (erro != null)
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(erro!, style: const TextStyle(color: Colors.red)),
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                erro!,
+                style: const TextStyle(color: Colors.red),
+              ),
             ),
           if (respostas.isNotEmpty)
             Expanded(
-              child: ListView(
-                children: respostas.entries
-                    .map(
-                      (entry) =>
-                      ListTile(
-                        title: Text('Questão ${entry.key}'),
-                        trailing: Text(entry.value),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: respostas.length,
+                itemBuilder: (context, index) {
+                  final questao = respostas.keys.elementAt(index);
+                  final resposta = respostas[questao]!;
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                    child: ListTile(
+                      title: Text(
+                        'Questão $questao',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                )
-                    .toList(),
+                      trailing: Text(
+                        resposta,
+                        style: const TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
         ],
