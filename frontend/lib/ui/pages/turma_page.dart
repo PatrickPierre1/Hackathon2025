@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/pages/aluno_page.dart';
+import 'package:frontend/ui/widgets/custom_appbar.dart';
 import '../../datasources/remote/turma_remote.dart';
 import '../../models/turma.dart';
 
@@ -31,33 +32,35 @@ class _TurmasPageState extends State<TurmasPage> {
   void _filterTurmas(String query) {
     setState(() {
       _searchQuery = query;
-      _filteredTurmas =
-          _turmas
-              .where(
-                (turma) =>
-                    turma.nome.toLowerCase().contains(query.toLowerCase()),
-              )
-              .toList();
+      _filteredTurmas = _turmas
+          .where(
+            (turma) => turma.nome.toLowerCase().contains(query.toLowerCase()),
+      )
+          .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Turmas')),
+      backgroundColor: Colors.grey[100],
+      appBar: CustomAppBar(title: "Turmas", showBack: false),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Buscar por nome',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Buscar por nome da turma...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Colors.blueAccent),
                 ),
-                onChanged: _filterTurmas,
+                filled: true,
+                fillColor: Colors.white,
               ),
+              onChanged: _filterTurmas,
             ),
           ),
           Expanded(
@@ -73,25 +76,51 @@ class _TurmasPageState extends State<TurmasPage> {
                 }
 
                 if (_filteredTurmas.isEmpty) {
-                  return const Center(child: Text('Nenhuma turma encontrada.'));
+                  return const Center(
+                    child: Text(
+                      'Nenhuma turma encontrada.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
                 }
 
                 return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemCount: _filteredTurmas.length,
                   itemBuilder: (context, index) {
                     final turma = _filteredTurmas[index];
-                    return ListTile(
-                      leading: Icon(Icons.groups, color: Colors.blueAccent),
-                      title: Text(turma.nome),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AlunosPage(turma: turma,),
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 3,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.blue[100],
+                          child: const Icon(Icons.groups, color: Colors.blue),
+                        ),
+                        title: Text(
+                          turma.nome,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
-                        );
-                      },
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AlunosPage(turma: turma),
+                            ),
+                          );
+                        },
+                      ),
                     );
                   },
                 );

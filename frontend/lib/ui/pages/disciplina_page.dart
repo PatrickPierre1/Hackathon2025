@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/aluno.dart';
 import 'package:frontend/ui/pages/gabaritos_ocr_page.dart';
+import 'package:frontend/ui/widgets/custom_appbar.dart';
 import '../../datasources/remote/disciplina_remote.dart';
 import '../../models/disciplina.dart';
+import '../widgets/custom_appbar.dart';
 
 class DisciplinasPage extends StatefulWidget {
-
   final int turmaId;
   final Aluno aluno;
 
-  const DisciplinasPage({super.key, required this.turmaId, required this.aluno});
+  const DisciplinasPage({
+    super.key,
+    required this.turmaId,
+    required this.aluno,
+  });
 
   @override
   State<DisciplinasPage> createState() => _DisciplinasPageState();
@@ -36,33 +41,33 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
   void _filterDisciplinas(String query) {
     setState(() {
       _searchQuery = query;
-      _filteredDisciplinas =
-          _disciplina
-              .where(
-                (disciplina) =>
-                disciplina.nome.toLowerCase().contains(query.toLowerCase()),
-          )
-              .toList();
+      _filteredDisciplinas = _disciplina
+          .where((disciplina) =>
+          disciplina.nome.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Disciplinas')),
+      backgroundColor: Colors.grey[100],
+      appBar: const CustomAppBar(title: 'Disciplinas'),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Buscar por nome',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Buscar por nome da disciplina...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onChanged: _filterDisciplinas,
+                filled: true,
+                fillColor: Colors.white,
               ),
+              onChanged: _filterDisciplinas,
             ),
           ),
           Expanded(
@@ -78,25 +83,53 @@ class _DisciplinasPageState extends State<DisciplinasPage> {
                 }
 
                 if (_filteredDisciplinas.isEmpty) {
-                  return const Center(child: Text('Nenhuma disciplina encontrada.'));
+                  return const Center(
+                    child: Text(
+                      'Nenhuma disciplina encontrada.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
                 }
 
                 return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemCount: _filteredDisciplinas.length,
                   itemBuilder: (context, index) {
                     final disciplina = _filteredDisciplinas[index];
-                    return ListTile(
-                      leading: Icon(Icons.menu_book, color: Colors.blueAccent),
-                      title: Text(disciplina.nome),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => GabaritoOCRPage(alunoId: widget.aluno.id),
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 2,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.blue[100],
+                          child: const Icon(Icons.menu_book, color: Colors.blueAccent),
+                        ),
+                        title: Text(
+                          disciplina.nome,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GabaritoOCRPage(
+                                alunoId: widget.aluno.id,
+                              ),
                             ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     );
                   },
                 );
