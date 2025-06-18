@@ -1,42 +1,41 @@
 import 'package:flutter/material.dart';
-import '../../datasources/remote/turma_remote.dart';
-import '../../models/turma.dart';
-import 'disciplina_page.dart';
+import '../../datasources/remote/disciplina_remote.dart';
+import '../../models/disciplina.dart';
 
-class TurmasPage extends StatefulWidget {
-  const TurmasPage({super.key});
+class DisciplinasPage extends StatefulWidget {
+  const DisciplinasPage({super.key, required int turmaId});
 
   @override
-  State<TurmasPage> createState() => _TurmasPageState();
+  State<DisciplinasPage> createState() => _DisciplinasPageState();
 }
 
-class _TurmasPageState extends State<TurmasPage> {
-  late Future<List<Turma>> _turmasFuture;
-  List<Turma> _turmas = [];
-  List<Turma> _filteredTurmas = [];
+class _DisciplinasPageState extends State<DisciplinasPage> {
+  late Future<List<Disciplina>> _disciplinaFuture;
+  List<Disciplina> _disciplina = [];
+  List<Disciplina> _filteredDisciplinas = [];
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _turmasFuture = TurmaRemoteDataSource().getTurmas();
-    _turmasFuture.then((turmas) {
+    _disciplinaFuture = DisciplinaRemoteDataSource().getDisciplinas();
+    _disciplinaFuture.then((disciplinas) {
       setState(() {
-        _turmas = turmas;
-        _filteredTurmas = turmas;
+        _disciplina = disciplinas;
+        _filteredDisciplinas = disciplinas;
       });
     });
   }
 
-  void _filterTurmas(String query) {
+  void _filterDisciplinas(String query) {
     setState(() {
       _searchQuery = query;
-      _filteredTurmas =
-          _turmas
+      _filteredDisciplinas =
+          _disciplina
               .where(
-                (turma) =>
-                    turma.nome.toLowerCase().contains(query.toLowerCase()),
-              )
+                (disciplina) =>
+                disciplina.nome.toLowerCase().contains(query.toLowerCase()),
+          )
               .toList();
     });
   }
@@ -44,7 +43,7 @@ class _TurmasPageState extends State<TurmasPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Turmas')),
+      appBar: AppBar(title: const Text('Disciplinas')),
       body: Column(
         children: [
           Padding(
@@ -56,13 +55,13 @@ class _TurmasPageState extends State<TurmasPage> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
                 ),
-                onChanged: _filterTurmas,
+                onChanged: _filterDisciplinas,
               ),
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Turma>>(
-              future: _turmasFuture,
+            child: FutureBuilder<List<Disciplina>>(
+              future: _disciplinaFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -72,24 +71,19 @@ class _TurmasPageState extends State<TurmasPage> {
                   return Center(child: Text('Erro: ${snapshot.error}'));
                 }
 
-                if (_filteredTurmas.isEmpty) {
-                  return const Center(child: Text('Nenhuma turma encontrada.'));
+                if (_filteredDisciplinas.isEmpty) {
+                  return const Center(child: Text('Nenhuma disciplina encontrada.'));
                 }
 
                 return ListView.builder(
-                  itemCount: _filteredTurmas.length,
+                  itemCount: _filteredDisciplinas.length,
                   itemBuilder: (context, index) {
-                    final turma = _filteredTurmas[index];
+                    final disciplina = _filteredDisciplinas[index];
                     return ListTile(
-                      title: Text(turma.nome),
+                      title: Text(disciplina.nome),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DisciplinasPage(turmaId: turma.id),
-                          ),
-                        );
+
                       },
                     );
                   },
