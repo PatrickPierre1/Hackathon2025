@@ -41,7 +41,6 @@ public class UsuarioService implements UserDetailsService {
         Usuario usuarioExistente = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
 
-        usuarioExistente.setNome(usuarioAtualizado.getNome());
         usuarioExistente.setLogin(usuarioAtualizado.getLogin());
         usuarioExistente.setRole(usuarioAtualizado.getRole());
 
