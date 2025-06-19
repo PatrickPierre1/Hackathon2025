@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/ui/pages/turma_page.dart';
+import 'ui/pages/login_page.dart';
 
 void main() {
-  runApp(
-    const MaterialApp(
-      home: TurmasPage(),
-      title: "Gabarito OCR",
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-    ),
-  );
+      title: 'Gabarito OCR',
+      home: const LoginPage(),
+    );
+  }
 }
