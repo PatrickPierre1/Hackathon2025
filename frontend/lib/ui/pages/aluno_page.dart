@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../models/turma.dart';
 import '../../models/aluno.dart';
-import 'disciplina_page.dart'; // ou próxima tela desejada
+import '../widgets/custom_appbar.dart';
+import 'disciplina_page.dart';
+import '../widgets/custom_appbar.dart';
 
 class AlunosPage extends StatefulWidget {
   final Turma turma;
@@ -38,48 +40,77 @@ class _AlunosPageState extends State<AlunosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Alunos - ${widget.turma.nome}')),
+      backgroundColor: Colors.grey[100],
+      appBar: CustomAppBar(title: 'Alunos - ${widget.turma.nome}'),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              child: TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Buscar por nome ou RA',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Buscar por nome ou RA...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onChanged: _filterAlunos,
+                filled: true,
+                fillColor: Colors.white,
               ),
+              onChanged: _filterAlunos,
             ),
           ),
           Expanded(
             child: _filteredAlunos.isEmpty
-                ? const Center(child: Text('Nenhum aluno encontrado.'))
+                ? const Center(
+              child: Text(
+                'Nenhum aluno encontrado.',
+                style: TextStyle(fontSize: 16),
+              ),
+            )
                 : ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               itemCount: _filteredAlunos.length,
               itemBuilder: (context, index) {
                 final aluno = _filteredAlunos[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    foregroundColor: Colors.blueAccent,
-                    child: Text(aluno.nome.substring(0, 1).toUpperCase(),)
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  title: Text(aluno.nome),
-                  subtitle: Text('RA: ${aluno.ra}'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DisciplinasPage(
-                          turmaId: widget.turma.id,
-                          aluno: aluno,
-                        ),
+                  elevation: 2,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.blue[100],
+                      child: Text(
+                        aluno.nome.substring(0, 1).toUpperCase(),
+                        style: const TextStyle(color: Colors.blueAccent),
                       ),
-                    );
-                  },
+                    ),
+                    title: Text(
+                      aluno.nome,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text('RA: ${aluno.ra}'),
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DisciplinasPage(
+                            turmaId: widget.turma.id,
+                            aluno: aluno,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),
