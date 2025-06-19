@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Novo Usuário – UniAlfa', ~{::main})">
+
+<main>
+    <div class="container mt-4">
+        <!-- Breadcrumb -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/usuario/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                                👥 Usuários
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Novo Usuário</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header text-center py-4"
+                         style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 3px solid #4b6cb7;">
+                        <h4 class="mb-0 fw-semibold text-dark">
+                            📝 Dados do Usuário
+                        </h4>
+                    </div>
+                    <div class="card-body p-5">
+                        <form th:action="@{/usuario/salvar}" method="post" id="userForm">
+
+                            <!-- Campo Nome -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2" for="nome">
+                                    <span class="me-2">👤</span>Nome Completo
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">👤</span>
+                                    </span>
+                                    <input class="form-control form-control-lg border-start-0 shadow-sm"
+                                           id="nome"
+                                           name="nome"
+                                           type="text"
+                                           placeholder="Digite o nome completo do usuário"
+                                           required
+                                           style="border-left: 3px solid #4b6cb7;">
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Nome que será exibido no sistema</small>
+                                </div>
+                            </div>
+
+                            <!-- Campo Login -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2" for="login">
+                                    <span class="me-2">🚫</span>Nome de Usuário
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">🚫</span>
+                                    </span>
+                                    <input class="form-control form-control-lg border-start-0 shadow-sm"
+                                           id="login"
+                                           name="login"
+                                           type="text"
+                                           placeholder="Ex: joao.silva"
+                                           required
+                                           style="border-left: 3px solid #4b6cb7;">
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Nome único para login no sistema (sem espaços)</small>
+                                </div>
+                            </div>
+
+                            <!-- Campo Senha -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2" for="password">
+                                    <span class="me-2">🔒</span>Senha
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">🔒</span>
+                                    </span>
+                                    <input class="form-control form-control-lg border-start-0 shadow-sm"
+                                           id="password"
+                                           name="password"
+                                           type="password"
+                                           placeholder="Digite uma senha segura"
+                                           required
+                                           minlength="6"
+                                           style="border-left: 3px solid #4b6cb7;">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        👁️
+                                    </button>
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Mínimo de 6 caracteres</small>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-5">
+                                <label class="form-label fw-semibold text-dark mb-2" for="role">
+                                    <span class="me-2">🛡️</span>Perfil de Acesso
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">🛡️</span>
+                                    </span>
+                                    <select class="form-select form-select-lg border-start-0 shadow-sm"
+                                            id="role"
+                                            name="role"
+                                            style="border-left: 3px solid #4b6cb7;">
+                                        <option value="USER">👤 Usuário Padrão</option>
+                                        <option value="ADMIN">🛡️ Administrador</option>
+                                        <option value="PROF">👨‍🏫 Professor</option>
+                                        <option value="ALUNO">👨‍🎓 Aluno</option>
+                                    </select>
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Nível de permissões no sistema</small>
+                                </div>
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="d-grid gap-3">
+                                <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                                        type="submit"
+                                        style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
+                                    <span class="me-2">💾</span>Cadastrar Usuário
+                                </button>
+
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-outline-secondary btn-lg flex-fill py-3"
+                                       th:href="@{/usuario/listar}">
+                                        <span class="me-2">↩️</span>Voltar à Lista
+                                    </a>
+                                    <button class="btn btn-outline-warning btn-lg flex-fill py-3"
+                                            type="reset">
+                                        <span class="me-2">🔄</span>Limpar Dados
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Card de ajuda -->
+                <div class="card border-0 shadow-sm mt-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted mb-3">
+                            💡 Dicas para um cadastro seguro
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled small text-muted">
+                                    <li class="mb-2">✅ Preencha os campos corretamente</li>
+                                    <li class="mb-2">✅ Login único sem espaços</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled small text-muted">
+                                    <li class="mb-2">🔒 Senha com pelo menos 6 caracteres</li>
+                                    <li class="mb-2">🛡️ Escolha o perfil adequado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Toggle mostrar/ocultar senha
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const button = this;
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                button.innerHTML = '🙈';
+            } else {
+                passwordField.type = 'password';
+                button.innerHTML = '👁️';
+            }
+        });
+
+        // Validação em tempo real do login (remover espaços)
+        document.getElementById('login').addEventListener('input', function() {
+            this.value = this.value.replace(/\s/g, '').toLowerCase();
+        });
+
+        // Efeito de validação visual
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            const requiredFields = this.querySelectorAll('[required]');
+            let allValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                }
+            });
+
+            if (!allValid) {
+                e.preventDefault();
+                alert('⚠️ Por favor, preencha todos os campos obrigatórios!');
+            }
+        });
+
+        // Animação suave nos campos de input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'all 0.2s ease';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+    <style>
+        .form-control:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+
+        .form-select:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .input-group-text {
+            border-color: #dee2e6;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            animation: shake 0.5s;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .breadcrumb-item a:hover {
+            color: #182848 !important;
+        }
+    </style>
+</main>
+</body>
+</html>

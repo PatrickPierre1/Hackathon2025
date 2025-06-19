@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Acesso Proibido – UniAlfa', ~{::main})">
+
+<main>
+    <div class="container d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 70vh;">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-4">
+                    <i class="fas fa-ban text-danger" style="font-size: 5rem;"></i>
+                </div>
+                <h1 class="display-1 text-danger fw-bold mb-3">403</h1>
+                <h2 class="h2 text-danger mb-4">Acesso Proibido</h2>
+                <p class="lead mb-4">
+                    Você não possui as permissões necessárias para acessar este recurso.
+                </p>
+                <p class="text-muted mb-4">
+                    Este conteúdo é restrito e requer autorização especial.
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="/" class="btn btn-primary btn-lg me-md-2">
+                        <i class="fas fa-home me-2"></i>Página Inicial
+                    </a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

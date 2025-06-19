@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Editar Usuário – UniAlfa', ~{::main})">
+
+<main>
+    <div class="container mt-4">
+        <!-- Breadcrumb -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/usuario/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                                👥 Usuários
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Usuário</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header text-center py-4"
+                         style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 3px solid #4b6cb7;">
+                        <h4 class="mb-1 fw-semibold text-dark">
+                            ✏️ Editar Dados do Usuário
+                        </h4>
+                    </div>
+                    <div class="card-body p-5">
+                        <form th:action="@{/usuario/salvar}" method="post" th:object="${usuario}" id="editUserForm">
+
+                            <!-- Campo ID oculto -->
+                            <input type="hidden" th:field="*{id}">
+
+                            <!-- Campo Nome -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2" for="nome">
+                                    <span class="me-2">👤</span>Nome Completo
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">👤</span>
+                                    </span>
+                                    <input class="form-control form-control-lg border-start-0 shadow-sm"
+                                           id="nome"
+                                           th:field="*{nome}"
+                                           type="text"
+                                           placeholder="Digite o nome completo do usuário"
+                                           required
+                                           style="border-left: 3px solid #4b6cb7;">
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Nome que será exibido no sistema</small>
+                                </div>
+                            </div>
+
+                            <!-- Campo Login -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2" for="login">
+                                    <span class="me-2">🔑</span>Nome de Usuário
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">🔑</span>
+                                    </span>
+                                    <input class="form-control form-control-lg border-start-0 shadow-sm"
+                                           id="login"
+                                           th:field="*{login}"
+                                           type="text"
+                                           placeholder="Ex: joao.silva"
+                                           required
+                                           style="border-left: 3px solid #4b6cb7;">
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Nome único para login no sistema (sem espaços)</small>
+                                </div>
+                            </div>
+
+                            <!-- Campo Senha -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2" for="password">
+                                    <span class="me-2">🔒</span>Nova Senha
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">🔒</span>
+                                    </span>
+                                    <input class="form-control form-control-lg border-start-0 shadow-sm"
+                                           id="password"
+                                           name="password"
+                                           type="password"
+                                           placeholder="Digite uma nova senha (deixe em branco para manter atual)"
+                                           minlength="6"
+                                           style="border-left: 3px solid #4b6cb7;">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        👁️
+                                    </button>
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>⚠️ Deixe em branco para manter a senha atual. Mínimo de 6 caracteres se
+                                        alterada.</small>
+                                </div>
+                            </div>
+
+                            <!-- Campo Perfil -->
+                            <div class="mb-5">
+                                <label class="form-label fw-semibold text-dark mb-2" for="role">
+                                    <span class="me-2">🛡️</span>Perfil de Acesso
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                                        <span class="fw-bold">🛡️</span>
+                                    </span>
+                                    <select class="form-select form-select-lg border-start-0 shadow-sm"
+                                            id="role"
+                                            th:field="*{role}"
+                                            style="border-left: 3px solid #4b6cb7;">
+                                        <option value="USER">👤 Usuário Padrão</option>
+                                        <option value="ADMIN">🛡️ Administrador</option>
+                                        <option value="PROF">👨‍🏫 Professor</option>
+                                        <option value="ALUNO">👨‍🎓 Aluno</option>
+                                    </select>
+                                </div>
+                                <div class="form-text text-muted">
+                                    <small>Nível de permissões no sistema</small>
+                                </div>
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="d-grid gap-3">
+                                <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                                        type="submit"
+                                        style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); border: none; color: white;">
+                                    <span class="me-2">💾</span>Atualizar Usuário
+                                </button>
+
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-outline-secondary btn-lg flex-fill py-3"
+                                       th:href="@{/usuario/listar}">
+                                        <span class="me-2">↩️</span>Voltar à Lista
+                                    </a>
+                                    <button class="btn btn-outline-warning btn-lg flex-fill py-3"
+                                            type="button"
+                                            onclick="resetForm()">
+                                        <span class="me-2">🔄</span>Desfazer Alterações
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm"
+                         style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+                        <div class="card-body">
+                            <h6 class="card-title text-muted mb-3">
+                                💡 Dicas para edição segura
+                            </h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li class="mb-2">✅ Verifique os dados antes de salvar</li>
+                                <li class="mb-2">🔒 Senha vazia = mantém a atual</li>
+                                <li class="mb-2">🛡️ Cuidado ao alterar perfis</li>
+                                <li class="mb-2">📋 Login deve ser único</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Salvar valores originais para reset
+        const originalValues = {
+            nome: document.getElementById('nome').value,
+            login: document.getElementById('login').value,
+            role: document.getElementById('role').value
+        };
+
+        // Toggle mostrar/ocultar senha
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const button = this;
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                button.innerHTML = '🙈';
+            } else {
+                passwordField.type = 'password';
+                button.innerHTML = '👁️';
+            }
+        });
+
+        // Validação em tempo real do login (remover espaços)
+        document.getElementById('login').addEventListener('input', function() {
+            this.value = this.value.replace(/\s/g, '').toLowerCase();
+        });
+
+        // Função para resetar o formulário aos valores originais
+        function resetForm() {
+            if (confirm('🔄 Tem certeza que deseja desfazer todas as alterações?')) {
+                document.getElementById('nome').value = originalValues.nome;
+                document.getElementById('login').value = originalValues.login;
+                document.getElementById('role').value = originalValues.role;
+                document.getElementById('password').value = '';
+
+                // Remover classes de validação
+                document.querySelectorAll('.form-control').forEach(field => {
+                    field.classList.remove('is-invalid', 'is-valid');
+                });
+            }
+        }
+
+        // Efeito de validação visual
+        document.getElementById('editUserForm').addEventListener('submit', function(e) {
+            const requiredFields = this.querySelectorAll('[required]');
+            const passwordField = document.getElementById('password');
+            let allValid = true;
+
+            // Validar campos obrigatórios
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    allValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                }
+            });
+
+            // Validar senha se foi preenchida
+            if (passwordField.value && passwordField.value.length < 6) {
+                passwordField.classList.add('is-invalid');
+                allValid = false;
+                alert('⚠️ A nova senha deve ter pelo menos 6 caracteres!');
+            } else if (passwordField.value) {
+                passwordField.classList.remove('is-invalid');
+                passwordField.classList.add('is-valid');
+            }
+
+            if (!allValid) {
+                e.preventDefault();
+                if (!passwordField.value || passwordField.value.length >= 6) {
+                    alert('⚠️ Por favor, preencha todos os campos obrigatórios!');
+                }
+            }
+        });
+
+        // Detectar mudanças no formulário
+        let formChanged = false;
+        document.querySelectorAll('#editUserForm input, #editUserForm select').forEach(field => {
+            field.addEventListener('input', function() {
+                formChanged = true;
+            });
+        });
+
+        // Aviso ao sair da página com alterações não salvas
+        window.addEventListener('beforeunload', function(e) {
+            if (formChanged) {
+                const message = 'Você tem alterações não salvas. Tem certeza que deseja sair?';
+                e.returnValue = message;
+                return message;
+            }
+        });
+
+        // Remover aviso ao submeter formulário
+        document.getElementById('editUserForm').addEventListener('submit', function() {
+            formChanged = false;
+        });
+
+        // Animação suave nos campos de input
+        document.querySelectorAll('.form-control, .form-select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'all 0.2s ease';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Destacar campos alterados
+        Object.keys(originalValues).forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.addEventListener('input', function() {
+                    if (this.value !== originalValues[fieldName]) {
+                        this.style.borderLeftColor = '#ffc107';
+                        this.style.borderLeftWidth = '4px';
+                    } else {
+                        this.style.borderLeftColor = '#4b6cb7';
+                        this.style.borderLeftWidth = '3px';
+                    }
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .input-group-text {
+            border-color: #dee2e6;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            animation: shake 0.5s;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .breadcrumb-item a:hover {
+            color: #182848 !important;
+        }
+
+        /* Indicador de campo alterado */
+        .form-control[style*="border-left-color: rgb(255, 193, 7)"] {
+            background-color: rgba(255, 193, 7, 0.05);
+        }
+
+        /* Estilo para informações adicionais */
+        .card-title {
+            font-size: 0.9rem;
+        }
+
+        .list-unstyled li {
+            padding: 2px 0;
+        }
+    </style>
+</main>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:fragment="base(title, content)">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${title}">Sistema Escola</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+            crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <style>
+        header.dashboard-header {
+          background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+          box-shadow: 0 3px 8px rgb(24 40 72 / 0.3);
+        }
+        .nav-link {
+          color: #cbd6e8;
+          font-weight: 600;
+          transition: color 0.3s;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+          color: #ffd43b !important;
+          border-bottom: 3px solid #ffd43b;
+          padding-bottom: calc(0.5rem - 3px);
+        }
+        .navbar-brand {
+          font-weight: 700;
+          font-size: 1.5rem;
+          color: #fff !important;
+          user-select: none;
+        }
+        .btn-logout {
+          color: #ffd43b;
+          border: 1.5px solid #ffd43b;
+          font-weight: 600;
+          transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-logout:hover {
+          background-color: #ffd43b;
+          color: #182848;
+        }
+    </style>
+</head>
+
+<body>
+
+<main>
+    <div class="container-fluid login-wrapper d-flex p-0 min-vh-100">
+        <div class="row flex-grow-1 g-0">
+
+            <!-- Form side -->
+            <div class="col-lg-6 d-flex align-items-center justify-content-center bg-light">
+                <div class="login-form w-75 mx-auto py-5">
+                    <!-- Logo/Brand -->
+                    <div class="text-center mb-5">
+                        <div class="login-logo mb-3">
+                            <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                                 style="width: 80px; height: 80px; background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);">
+                                <span class="text-white fw-bold fs-2">🎓</span>
+                            </div>
+                        </div>
+                        <h1 class="fw-bold text-dark mb-2">Bem-vindo de volta!</h1>
+                        <p class="text-muted">Faça login para acessar sua conta</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
+
+                        <!-- Error Alert -->
+                        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                            <div class="d-flex align-items-center">
+                                <span class="me-2">⚠️</span>
+                                <div>
+                                    <strong>Erro de autenticação!</strong><br>
+                                    Usuário ou senha incorretos. Tente novamente.
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Username Field -->
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-semibold text-dark">
+                                👤 Usuário
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-white border-end-0 text-muted">
+                                    👤
+                                </span>
+                                <input
+                                        type="text"
+                                        id="username"
+                                        name="username"
+                                        class="form-control border-start-0 shadow-sm"
+                                        placeholder="Digite seu usuário"
+                                        required
+                                        style="border-left: none !important;"
+                                />
+                                <div class="invalid-feedback">
+                                    Por favor, digite seu usuário.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold text-dark">
+                                🔐 Senha
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-white border-end-0 text-muted">
+                                    🔐
+                                </span>
+                                <input
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        class="form-control border-start-0 border-end-0 shadow-sm"
+                                        placeholder="••••••••"
+                                        required
+                                        style="border-left: none !important; border-right: none !important;"
+                                />
+                                <button
+                                        class="btn btn-outline-secondary border-start-0"
+                                        type="button"
+                                        onclick="togglePassword()"
+                                        style="border-left: none !important;"
+                                        title="Mostrar/Ocultar senha"
+                                >
+                                    <span id="eyeIcon">👁️</span>
+                                </button>
+                                <div class="invalid-feedback">
+                                    Por favor, digite sua senha.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Login Button -->
+                        <button type="submit" class="btn btn-lg w-100 py-3 mb-4 fw-semibold shadow-sm login-btn">
+                            🚀 Entrar no Sistema
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Hero side -->
+            <div class="col-lg-6 login-hero d-none d-lg-flex flex-column align-items-center justify-content-center text-white position-relative">
+                <div class="hero-overlay"></div>
+                <div class="hero-content text-center position-relative z-2">
+                    <div class="mb-4">
+                        <img src="/images/logo-unialfa.png" class="img-fluid mb-4" style="max-width: 200px;"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                        <div class="logo-fallback" style="display: none;">
+                            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                                 style="width: 120px; height: 120px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
+                                <span class="text-white fw-bold" style="font-size: 3rem;">🎓</span>
+                            </div>
+                            <h2 class="fw-bold mb-3">UniAlfa</h2>
+                        </div>
+                    </div>
+                    <h2 class="fw-bold mb-3 display-6">A melhor experiência acadêmica</h2>
+                    <p class="lead mb-4">que você já teve na sua vida.</p>
+                </div>
+
+                <!-- Floating Elements -->
+                <div class="floating-elements">
+                    <div class="floating-element" style="top: 10%; left: 10%; animation-delay: 0s;">📖</div>
+                    <div class="floating-element" style="top: 20%; right: 15%; animation-delay: 1s;">🎯</div>
+                    <div class="floating-element" style="bottom: 30%; left: 20%; animation-delay: 2s;">💡</div>
+                    <div class="floating-element" style="bottom: 15%; right: 10%; animation-delay: 3s;">🏆</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        .login-wrapper {
+            background: #f8f9fa;
+        }
+
+        .login-hero {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(75, 108, 183, 0.3);
+            color: white;
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-control:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.2rem rgba(75, 108, 183, 0.25);
+        }
+
+        .input-group-text {
+            border-color: #dee2e6;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .login-logo {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-content {
+            animation: slideInRight 1s ease-out;
+        }
+
+        .login-form {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .login-form {
+                max-width: 400px;
+            }
+        }
+    </style>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.textContent = '🙈';
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.textContent = '👁️';
+            }
+        }
+
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Auto-hide alert after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                setTimeout(function() {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            }
+        });
+    </script>
+</main>
+
+</body>
+</html>
