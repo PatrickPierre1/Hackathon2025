@@ -11,5 +11,4 @@ import lombok.Setter;
 public class Administrador extends  Usuario{
 
     private Long cpf;
-    private String nome;
 }

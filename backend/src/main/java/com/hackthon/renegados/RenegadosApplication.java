@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Arrays;
-
 @SpringBootApplication
 public class RenegadosApplication {
 
@@ -28,9 +26,26 @@ public class RenegadosApplication {
 
 			usuarioRepository.save(new Usuario(
 					null,
+					"user",
 					"admin",
 					new BCryptPasswordEncoder().encode("admin"),
 					"ADMIN"
+			));
+
+			usuarioRepository.save(new Usuario(
+					null,
+					"professor",
+					"professor",
+					new BCryptPasswordEncoder().encode("professor"),
+					"PROF"
+			));
+
+			usuarioRepository.save(new Usuario(
+					null,
+					"aluno",
+					"aluno",
+					new BCryptPasswordEncoder().encode("aluno"),
+					"ALUNO"
 			));
 		};
 	}

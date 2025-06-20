@@ -15,7 +15,6 @@ public class Aluno extends Usuario {
     @Column(name = "ra", nullable = true) // nome da coluna
     private String ra;
 
-    @Column(name = "nome")
-    private String nome;
+
 
 }

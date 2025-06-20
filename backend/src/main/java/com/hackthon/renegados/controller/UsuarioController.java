@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 
 @Controller
 @RequestMapping("usuario")
-public class UsuarioController {
+public class                       UsuarioController {
 
     private final UsuarioService service;
     private String rule = "ROLE_USER";
@@ -29,10 +29,7 @@ public class UsuarioController {
 
     // Salvar Usuário e redireciona para home
     @PostMapping("/salvar")
-    public String salvar(com.hackthon.renegados.model.Usuario usuario) {
-        if (usuario.getRole() == null) {
-            usuario.setRole(rule);
-        }
+    public String salvar(Usuario usuario) {
         service.save(usuario);
         return "redirect:/usuario/listar";
     }

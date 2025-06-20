@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Editar Professor – UniAlfa', ~{::main})">
+
+<main>
+  <div class="container mt-4">
+    <!-- Breadcrumb -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a th:href="@{/professor/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                👨‍🏫 Professores
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              <a th:href="@{/professor/visualizar/{id}(id=${professor.id})}" class="text-decoration-none" style="color: #4b6cb7;">
+                Detalhes do Professor
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Professor</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <form th:action="@{/professor/salvar}" method="post" id="professorForm" th:object="${professor}">
+      <input type="hidden" th:field="*{id}" />
+
+      <!-- Nome Completo -->
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <label class="form-label fw-semibold text-dark mb-2" for="nome">
+            <span class="me-2">👤</span>Nome Completo
+          </label>
+          <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                            <span class="fw-bold">👤</span>
+                        </span>
+            <input class="form-control form-control-lg border-start-0 shadow-sm"
+                   id="nome"
+                   th:field="*{nome}"
+                   type="text"
+                   placeholder="Digite o nome completo do Professor"
+                   required
+                   style="border-left: 3px solid #4b6cb7;">
+          </div>
+        </div>
+      </div>
+
+      <!-- CPF -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold text-dark mb-2" for="cpf">
+            <span class="me-2">🎫</span>CPF
+          </label>
+          <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                            <span class="fw-bold">🎫</span>
+                        </span>
+            <input class="form-control form-control-lg border-start-0 shadow-sm"
+                   id="cpf"
+                   th:field="*{cpf}"
+                   type="text"
+                   placeholder="000.000.000-00"
+                   required
+                   style="border-left: 3px solid #4b6cb7;"
+                   readonly>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login -->
+      <div class="row mb-4">
+        <div class="col-md-7">
+          <label class="form-label fw-semibold text-dark mb-2" for="login">
+            <span class="me-2">📧</span>E-mail Institucional
+          </label>
+          <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                            <span class="fw-bold">📧</span>
+                        </span>
+            <input class="form-control form-control-lg border-start-0 shadow-sm"
+                   id="login"
+                   th:field="*{login}"
+                   type="email"
+                   placeholder="professor@unialfa.edu.br"
+                   required
+                   style="border-left: 3px solid #4b6cb7;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Password (opcional para edição) -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold text-dark mb-2" for="password">
+            <span class="me-2">🔒</span>Nova Senha (opcional)
+          </label>
+          <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                            <span class="fw-bold">🔒</span>
+                        </span>
+            <input class="form-control form-control-lg border-start-0 shadow-sm"
+                   id="password"
+                   name="password"
+                   type="password"
+                   placeholder="Deixe em branco para manter a atual"
+                   style="border-left: 3px solid #4b6cb7;">
+          </div>
+          <small class="text-muted">Preencha apenas se desejar alterar a senha</small>
+        </div>
+      </div>
+
+      <!-- Botões -->
+      <div class="d-grid gap-3 mt-5">
+        <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                type="submit"
+                style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
+          <span class="me-2">💾</span>Salvar Alterações
+        </button>
+
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary btn-lg flex-fill py-3"
+             th:href="@{/professor/visualizar/{id}(id=${professor.id})}">
+            <span class="me-2">↩️</span>Cancelar
+          </a>
+          <button class="btn btn-outline-warning btn-lg flex-fill py-3"
+                  type="reset">
+            <span class="me-2">🔄</span>Restaurar Valores
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Máscara para CPF
+    document.getElementById('cpf').addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        this.value = value;
+    });
+
+    // Validação de CPF
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpf.charAt(9))) return false;
+
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) resto = 0;
+        return resto === parseInt(cpf.charAt(10));
+    }
+
+    // Validação do formulário
+    document.getElementById('professorForm').addEventListener('submit', function(e) {
+        const requiredFields = this.querySelectorAll('[required]');
+        let allValid = true;
+
+        // Validar campos obrigatórios
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                allValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+
+        // Validar CPF
+        const cpfField = document.getElementById('cpf');
+        if (cpfField.value && !validarCPF(cpfField.value)) {
+            cpfField.classList.add('is-invalid');
+            allValid = false;
+            alert('❌ CPF inválido!');
+            e.preventDefault();
+            return;
+        }
+
+        if (!allValid) {
+            e.preventDefault();
+            alert('⚠️ Por favor, preencha todos os campos obrigatórios corretamente!');
+        }
+    });
+
+    // Animação suave nos campos de input
+    document.querySelectorAll('.form-control, .form-select').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.transform = 'scale(1.02)';
+            this.style.transition = 'all 0.2s ease';
+        });
+
+        input.addEventListener('blur', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+  </script>
+
+  <style>
+    .form-control:focus, .form-select:focus {
+        border-color: #4b6cb7;
+        box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .input-group-text {
+        border-color: #dee2e6;
+    }
+
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #dc3545;
+        animation: shake 0.5s;
+    }
+
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        opacity: 1;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .breadcrumb-item a:hover {
+        color: #182848 !important;
+    }
+
+    /* Responsividade aprimorada */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .row.mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+    }
+  </style>
+</main>
+</body>
+</html>

@@ -28,6 +28,7 @@ public class UsuarioService implements UserDetailsService {
 
     public UserDetails save(Usuario usuario) {
         usuario.setPassword(new BCryptPasswordEncoder().encode(usuario.getPassword()));
+        usuario.setRole("ADMIN");
         return repository.save(usuario);
     }
 

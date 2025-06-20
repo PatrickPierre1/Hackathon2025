@@ -24,9 +24,11 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nome;
     private String login;
     private String password;
     private String role;
+
 
 
 
