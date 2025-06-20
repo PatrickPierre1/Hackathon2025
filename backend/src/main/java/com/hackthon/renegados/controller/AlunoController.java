@@ -15,7 +15,9 @@ public class AlunoController {
 
     private final AlunoService alunoService;
 
-    public AlunoController(AlunoService alunoService) { this.alunoService = alunoService; }
+    public AlunoController(AlunoService alunoService) {
+        this.alunoService = alunoService;
+    }
 
 
     @GetMapping("/listar")
@@ -26,10 +28,12 @@ public class AlunoController {
 
     // Abrir Formulário, retorna o template
     @GetMapping("/abrirFormulario")
-    public String abrirFormulario() {
+    public String abrirFormulario(Model model) {
         System.out.println("Abrindo formulário de cadastro");
+        model.addAttribute("aluno", new Aluno());
         return "/pages/aluno/formularioCadastro";
     }
+
 
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("aluno") Aluno aluno) {
