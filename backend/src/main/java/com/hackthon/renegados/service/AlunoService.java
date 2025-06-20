@@ -18,6 +18,7 @@ public class AlunoService{
 
 
     public Aluno salvar(Aluno aluno){
+        System.out.println("to aqui mano :"+aluno);
         try{
             if (aluno == null){
                 throw  new RuntimeException("errou");
