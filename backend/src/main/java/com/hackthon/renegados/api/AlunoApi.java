@@ -12,16 +12,20 @@ import java.util.List;
 @RequestMapping("api/aluno")
 public class AlunoApi {
 
+
     @Autowired
     private AlunoService alunoService;
 
-    @GetMapping
+
+    @GetMapping("/listar")
     public List<Aluno> listar(){
         return alunoService.listarTodos();
     }
 
-    @PostMapping
+
+    @PostMapping("/salvar")
     public Aluno adinionar(@RequestBody Aluno aluno){
         return alunoService.salvar(aluno);
     }
+
 }

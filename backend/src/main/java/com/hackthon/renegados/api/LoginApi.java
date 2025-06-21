@@ -49,14 +49,12 @@ public class LoginApi {
             String role = usuario.getRole();
 
             // Gera o token dependen do tipo de rule que o usuário tem
-            if (role == "ADMIN") {
+            if ("ADMIN".equals(role)) {
                 token = jwtUtil.adminToken(loginRequest.getLogin(), role);
-            }else if (role == "PROF") {
-                token = jwtUtil.adminToken(loginRequest.getLogin(), role);
-            }else if (role == "ALUNO") {
-                token = jwtUtil.adminToken(loginRequest.getLogin(), role);
-            }else {
-                token = jwtUtil.userToken(loginRequest.getLogin(), role);
+            } else if ("PROF".equals(role)) {
+                token = jwtUtil.profToken(loginRequest.getLogin(), role);
+            } else if ("ALUNO".equals(role)) {
+                token = jwtUtil.alunoToken(loginRequest.getLogin(), role);
             }
 
 
