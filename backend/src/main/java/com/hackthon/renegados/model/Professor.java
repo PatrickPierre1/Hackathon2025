@@ -10,6 +10,5 @@ import lombok.Setter;
 public class Professor extends Usuario{
 
     private Long cpf;
-    private String nome;
 
 }
