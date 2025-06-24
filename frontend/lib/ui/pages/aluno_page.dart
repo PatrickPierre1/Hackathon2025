@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/ui/pages/gabaritos_ocr_page.dart';
 import '../../models/turma.dart';
 import '../../models/aluno.dart';
 import '../widgets/custom_appbar.dart';
@@ -103,9 +104,8 @@ class _AlunosPageState extends State<AlunosPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DisciplinasPage(
-                            turmaId: widget.turma.id,
-                            aluno: aluno,
+                          builder: (context) => GabaritoOCRPage(
+                            alunoId: aluno.id,
                           ),
                         ),
                       );
