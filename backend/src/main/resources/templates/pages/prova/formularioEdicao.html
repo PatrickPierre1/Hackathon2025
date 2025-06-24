@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body th:replace="fragments/layout :: base('Editar Prova – UniAlfa', ~{::main})">
+
+<main>
+    <div class="container mt-4">
+
+        <!-- Breadcrumb -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/prova/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                                📝 Provas
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Prova</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Formulário de edição -->
+        <form th:action="@{/provas/salvar}" method="post" th:object="${prova}">
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Data da prova -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark mb-2" for="data">
+                        <span class="me-2">📅</span>Data da Prova
+                    </label>
+                    <input type="date" class="form-control form-control-lg shadow-sm"
+                           th:field="*{data}"
+                           required />
+                </div>
+            </div>
+
+            <!-- Disciplina -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark mb-2" for="disciplina">
+                        <span class="me-2">📚</span>Disciplina
+                    </label>
+                    <select class="form-select form-select-lg shadow-sm"
+                            th:field="*{disciplina.id}" required>
+                        <option value="">Selecione...</option>
+                        <option th:each="disc : ${disciplinas}"
+                                th:value="${disc.id}"
+                                th:text="${disc.nome}"
+                                th:selected="${disc.id == prova.disciplina.id}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Lista de Questões -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h5 class="text-dark mb-3">Questões da Prova</h5>
+                    <div id="questoesContainer">
+                        <div class="row mb-3" th:each="questao, iter : *{questoes}">
+                            <input type="hidden" th:field="*{questoes[__${iter.index}__].id}" />
+                            <div class="col-md-2">
+                                <input type="text" class="form-control"
+                                       placeholder="Número"
+                                       th:field="*{questoes[__${iter.index}__].numeroQuestao}" required />
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control"
+                                       placeholder="Resposta"
+                                       th:field="*{questoes[__${iter.index}__].resposta}" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-grid gap-3 mt-5">
+                <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                        type="submit"
+                        style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
+                    💾 Atualizar Prova
+                </button>
+                <a class="btn btn-outline-secondary btn-lg py-3" th:href="@{/prova/listar}">
+                    ↩️ Voltar
+                </a>
+            </div>
+        </form>
+
+    </div>
+
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</main>
+</body>
+</html>

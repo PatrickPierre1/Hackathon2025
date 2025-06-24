@@ -94,7 +94,7 @@
                     <a class="nav-link" th:href="@{/disciplina/listar}">Disciplinas</a>
                 </li>
                 <li sec:authorize="hasAnyRole('ADMIN', 'PROF', 'ALUNO')" class="nav-item">
-                    <a class="nav-link" th:href="@{/provas}">Provas</a>
+                    <a class="nav-link" th:href="@{/provas/listar}">Provas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/logout}">Sair</a>

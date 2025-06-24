@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body th:replace="fragments/layout :: base('Cadastrar Prova', ~{::main})">
+
+<main>
+    <div class="container mt-4">
+        <h1 class="mb-4">📘 Cadastro de Prova com Questões</h1>
+
+        <form th:action="@{/provas/salvar}" method="post" th:object="${prova}">
+
+            <!-- Data da Prova -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">📅 Data da Prova</label>
+                <input type="date" class="form-control" th:field="*{data}" required>
+            </div>
+
+            <!-- Disciplina -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">📚 Disciplina</label>
+                <select class="form-select" th:field="*{disciplina.id}" required>
+                    <option th:each="d : ${disciplinas}"
+                            th:value="${d.id}"
+                            th:text="${d.nome}">Disciplina</option>
+                </select>
+            </div>
+
+            <!-- Lista de Questões -->
+            <div id="questoesContainer">
+                <h4 class="mb-3">📝 Questões</h4>
+
+                <div th:each="questao, iterStat : *{questoes}" class="card mb-3 p-3 shadow-sm">
+                    <div class="mb-3">
+                        <label class="form-label">Número da Questão</label>
+                        <input type="text" class="form-control"
+                               th:field="*{questoes[__${iterStat.index}__].numeroQuestao}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Resposta</label>
+                        <input type="text" class="form-control"
+                               th:field="*{questoes[__${iterStat.index}__].resposta}" required>
+                    </div>
+
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removerQuestao(this)">Remover</button>
+                </div>
+            </div>
+
+            <!-- Botão para adicionar nova questão -->
+            <div class="mb-4">
+                <button type="button" class="btn btn-outline-primary" onclick="adicionarQuestao()">
+                    ➕ Adicionar Questão
+                </button>
+            </div>
+
+            <!-- Ações -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">💾 Salvar Prova</button>
+                <a th:href="@{/provas}" class="btn btn-secondary">↩️ Voltar</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Script para adicionar/remover questões dinamicamente -->
+    <script>
+        function adicionarQuestao() {
+            const container = document.getElementById('questoesContainer');
+            const index = container.querySelectorAll('.card').length;
+
+            const div = document.createElement('div');
+            div.className = 'card mb-3 p-3 shadow-sm';
+
+            div.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label">Número da Questão</label>
+                    <input type="text" class="form-control" name="questoes[${index}].numeroQuestao" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Resposta</label>
+                    <input type="text" class="form-control" name="questoes[${index}].resposta" required>
+                </div>
+
+                <button type="button" class="btn btn-sm btn-danger" onclick="removerQuestao(this)">Remover</button>
+            `;
+
+            container.appendChild(div);
+        }
+
+        function removerQuestao(button) {
+            button.closest('.card').remove();
+        }
+    </script>
+</main>
+</body>
+</html>
