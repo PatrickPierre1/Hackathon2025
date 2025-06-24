@@ -79,7 +79,7 @@
         <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav ms-auto gap-3 align-items-center">
                 <li sec:authorize="hasAnyRole('ADMIN', 'PROF')" class="nav-item">
-                    <a class="nav-link" th:href="@{/turmas}">Turmas</a>
+                    <a class="nav-link" th:href="@{/turmas/listar}">Turmas</a>
                 </li>
                 <li sec:authorize="hasRole('ADMIN')" class="nav-item">
                     <a class="nav-link" th:href="@{/usuario/listar}">Usuários</a>
@@ -91,10 +91,10 @@
                     <a class="nav-link" th:href="@{/professor/listar}">Professores</a>
                 </li>
                 <li sec:authorize="hasAnyRole('ADMIN', 'PROF')" class="nav-item">
-                    <a class="nav-link" th:href="@{/disciplinas}">Disciplinas</a>
+                    <a class="nav-link" th:href="@{/disciplina/listar}">Disciplinas</a>
                 </li>
                 <li sec:authorize="hasAnyRole('ADMIN', 'PROF', 'ALUNO')" class="nav-item">
-                    <a class="nav-link" th:href="@{/provas}">Provas</a>
+                    <a class="nav-link" th:href="@{/prova/listar}">Provas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/logout}">Sair</a>

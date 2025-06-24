@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body th:replace="fragments/layout :: base('Visualizar Vínculo', ~{::main})">
+<main>
+  <div class="container mt-4">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">
+          <a th:href="@{/turma-disciplinas/listar}">Vínculos</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Visualizar</li>
+      </ol>
+    </nav>
+
+    <h2 class="mb-4 text-dark">📄 Detalhes do Vínculo</h2>
+
+    <div class="mb-3">
+      <strong>ID:</strong> <span th:text="${vinculo.id}"></span>
+    </div>
+    <div class="mb-3">
+      <strong>Turma:</strong> <span th:text="${vinculo.turma.nome}"></span>
+    </div>
+    <div class="mb-3">
+      <strong>Disciplina:</strong> <span th:text="${vinculo.disciplina.nome}"></span>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="text-dark mb-0">👨‍🎓 Alunos vinculados</h4>
+      <a th:href="@{/turma-disciplinas/vincular-aluno/{id}(id=${vinculo.id})}" class="btn btn-success">
+        ➕ Vincular Aluno
+      </a>
+    </div>
+
+    <table class="table table-hover mt-3 shadow-sm">
+      <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>RA</th>
+        <th>Email</th>
+        <th>Telefone</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${vinculo.alunos.empty}">
+        <td colspan="5" class="text-center text-muted">Nenhum aluno vinculado a este vínculo.</td>
+      </tr>
+      <tr th:each="aluno : ${vinculo.alunos}">
+        <td th:text="${aluno.id}"></td>
+        <td th:text="${aluno.nome}"></td>
+        <td th:text="${aluno.ra}"></td>
+        <td th:text="${aluno.email}"></td>
+        <td th:text="${aluno.telefone}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <a th:href="@{/turma-disciplinas/listar}" class="btn btn-secondary mt-3">↩️ Voltar</a>
+
+  </div>
+</main>
+</body>
+</html>

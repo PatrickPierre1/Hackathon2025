@@ -27,6 +27,7 @@ public class TurmaDisciplinaApi {
     @Autowired
     private AlunoService alunoService;
 
+
     // VINCULAR PROVA
     @PutMapping("/vincular-prova/{turmaId}/{disciplinaId}/{provaId}")
     public ResponseEntity<?> vincularProva(

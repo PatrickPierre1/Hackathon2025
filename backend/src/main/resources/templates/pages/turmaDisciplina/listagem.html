@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body th:replace="fragments/layout :: base('Vínculos Turma - Disciplina', ~{::main})">
+<main>
+  <div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-dark">📋 Vínculos Turma - Disciplina</h2>
+      <a th:href="@{/turma-disciplinas/novo}" class="btn btn-primary">
+        ➕ Novo Vínculo
+      </a>
+    </div>
+
+    <table class="table table-striped shadow-sm">
+      <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Turma</th>
+        <th>Disciplina</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="vinculo : ${vinculos}">
+        <td th:text="${vinculo.id}"></td>
+        <td th:text="${vinculo.turma.nome}"></td>
+        <td th:text="${vinculo.disciplina.nome}"></td>
+        <td>
+          <a th:href="@{/turma-disciplinas/visualizar/{id}(id=${vinculo.id})}" class="btn btn-info btn-sm">👁️ Ver</a>
+          <a th:href="@{/turma-disciplinas/remover/{id}(id=${vinculo.id})}"
+             class="btn btn-danger btn-sm"
+             onclick="return confirm('Você tem certeza que deseja remover este vínculo?')">
+            🗑️ Remover
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</main>
+</body>
+</html>

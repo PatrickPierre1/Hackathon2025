@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<body th:replace="fragments/layout :: base('Novo Vínculo Turma - Disciplina', ~{::main})">
+<main>
+  <div class="container mt-4">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">
+          <a th:href="@{/turma-disciplinas/listar}">Vínculos</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Novo Vínculo</li>
+      </ol>
+    </nav>
+
+    <h2 class="mb-4 text-dark">➕ Criar Novo Vínculo</h2>
+
+    <form th:action="@{/turma-disciplinas/salvar}" method="post">
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark" for="turmaId">Turma:</label>
+        <select class="form-select" id="turmaId" name="turmaId" required>
+          <option value="">Selecione a turma</option>
+          <option th:each="turma : ${turmas}"
+                  th:value="${turma.id}"
+                  th:text="${turma.nome}"></option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold text-dark" for="disciplinaId">Disciplina:</label>
+        <select class="form-select" id="disciplinaId" name="disciplinaId" required>
+          <option value="">Selecione a disciplina</option>
+          <option th:each="disciplina : ${disciplinas}"
+                  th:value="${disciplina.id}"
+                  th:text="${disciplina.nome}"></option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">💾 Salvar Vínculo</button>
+      <a th:href="@{/turma-disciplinas/listar}" class="btn btn-secondary">↩️ Cancelar</a>
+    </form>
+
+  </div>
+</main>
+</body>
+</html>

@@ -1,9 +1,12 @@
 package com.hackthon.renegados.service;
 
+import com.hackthon.renegados.model.Aluno;
 import com.hackthon.renegados.model.Disciplina;
 import com.hackthon.renegados.model.Turma;
 import com.hackthon.renegados.model.TurmaDisciplina;
+import com.hackthon.renegados.repository.AlunoRepository;
 import com.hackthon.renegados.repository.TurmaDisciplinaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,9 @@ public class TurmaDisciplinaService {
 
     @Autowired
     private TurmaDisciplinaRepository turmaDisciplinaRepository;
+
+    @Autowired
+    private AlunoRepository alunoRepository;
 
     @Autowired
     private TurmaService turmaService;
@@ -59,4 +65,42 @@ public class TurmaDisciplinaService {
                     return turmaDisciplinaRepository.save(td);
                 });
     }
+
+    public TurmaDisciplina criarVinculo(Turma turma, Disciplina disciplina) {
+        TurmaDisciplina existente = turmaDisciplinaRepository.findByTurmaIdAndDisciplinaId(turma.getId(), disciplina.getId())
+                .orElse(null);
+
+        if (existente != null) {
+            return existente; // Já existe o vínculo
+        }
+
+        TurmaDisciplina td = new TurmaDisciplina();
+        td.setTurma(turma);
+        td.setDisciplina(disciplina);
+        return turmaDisciplinaRepository.save(td);
+    }
+
+    public List<Long> buscarDisciplinasIdsPorTurma(Long turmaId) {
+        return turmaDisciplinaRepository.findByTurmaId(turmaId)
+                .stream()
+                .map(td -> td.getDisciplina().getId())
+                .toList();
+    }
+
+    @Transactional
+    public void vincularAluno(Long vinculoId, Long alunoId) {
+        TurmaDisciplina vinculo = turmaDisciplinaRepository.findById(vinculoId)
+                .orElseThrow(() -> new RuntimeException("Vínculo não encontrado"));
+
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+
+        // Setar a turmaDisciplina no aluno (lado dono)
+        aluno.setTurmaDisciplina(vinculo);
+
+        alunoRepository.save(aluno); 
+    }
+
+
+
 }

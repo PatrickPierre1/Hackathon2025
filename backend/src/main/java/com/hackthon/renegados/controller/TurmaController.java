@@ -1,5 +1,6 @@
 package com.hackthon.renegados.controller;
 
+import com.hackthon.renegados.api.dto.TurmaFormDto;
 import com.hackthon.renegados.model.*;
 import com.hackthon.renegados.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/turma")
+@RequestMapping("/turmas")
 public class TurmaController {
 
     @Autowired
@@ -22,85 +23,91 @@ public class TurmaController {
     @Autowired
     private TurmaDisciplinaService turmaDisciplinaService;
 
-    // LISTAR
+
+
+
+    // Listar turmas
     @GetMapping("/listar")
-    public String listar(Model model) {
+    public String listarTurmas(Model model) {
         List<Turma> turmas = turmaService.listarTodos();
         model.addAttribute("turmas", turmas);
-        return "pages/turma/listagemTurmas";
+        return "pages/turma/listagemTurma";
     }
 
-    // FORM ADICIONAR
-    @GetMapping("/adicionar")
-    public String adicionarForm(Model model) {
-        model.addAttribute("turma", new Turma());
-        return "turma/form"; // Exemplo: form.html
+    // Exibir formulário de criação
+    @GetMapping("/nova")
+    public String novo(Model model) {
+        model.addAttribute("turmaFormDto", new TurmaFormDto());
+        model.addAttribute("disciplinas", disciplinaService.listarTodos());
+        return "pages/turma/formularioCadastro";
     }
 
-    // SALVAR NOVA TURMA
     @PostMapping("/salvar")
-    public String salvar(@ModelAttribute Turma turma) {
+    public String salvar(@ModelAttribute TurmaFormDto turmaFormDto) {
+        Turma turma = new Turma();
+        turma.setNome(turmaFormDto.getNome());
         turmaService.salvar(turma);
-        return "redirect:/turma/listar";
+
+        for (Long disciplinaId : turmaFormDto.getDisciplinasIds()) {
+            Disciplina disciplina = disciplinaService.buscarPorId(disciplinaId);
+            turmaDisciplinaService.criarVinculo(turma, disciplina);
+        }
+
+        return "redirect:/turmas/listar";
     }
 
-    // FORM EDITAR
+
+    // Exibir formulário de edição
     @GetMapping("/editar/{id}")
-    public String editarForm(@PathVariable Long id, Model model) {
+    public String editarTurma(@PathVariable Long id, Model model) {
         Turma turma = turmaService.buscarPorId(id);
+
         if (turma == null) {
-            return "redirect:/turma/listar";
+            return "redirect:/turmas";
         }
-        model.addAttribute("turma", turma);
-        return "turma/form";
+
+        // Instancia o DTO
+        TurmaFormDto dto = new TurmaFormDto();
+        dto.setId(turma.getId());
+        dto.setNome(turma.getNome());
+
+        // Pega as disciplinas já vinculadas a essa turma
+        List<Long> disciplinasIds = turmaDisciplinaService.buscarDisciplinasIdsPorTurma(turma.getId());
+        dto.setDisciplinasIds(disciplinasIds);
+
+        // Adiciona no model
+        model.addAttribute("turmaFormDto", dto);
+        model.addAttribute("disciplinas", disciplinaService.listarTodos());
+
+        return "pages/turma/formularioEdicao";
     }
 
-    // ATUALIZAR TURMA
-    @PostMapping("/atualizar/{id}")
-    public String atualizar(@PathVariable Long id, @ModelAttribute Turma turma) {
-        turma.setId(id);
-        turmaService.salvar(turma);
-        return "redirect:/turma/listar";
-    }
 
-    // REMOVER TURMA
+
+    // Deletar turma
     @GetMapping("/remover/{id}")
-    public String remover(@PathVariable Long id) {
+    public String removerTurma(@PathVariable Long id) {
         turmaService.deletarPorId(id);
-        return "redirect:/turma/listar";
+        return "redirect:/turmas/listar";
     }
 
-    // DETALHE DE UMA TURMA
-    @GetMapping("/{id}")
-    public String detalhes(@PathVariable Long id, Model model) {
-        Turma turma = turmaService.buscarPorIdComDisciplinas(id);
-        if (turma == null) {
-            return "redirect:/turma/listar";
-        }
-        model.addAttribute("turma", turma);
-        return "turma/detalhes";
-    }
-
-    // FORM PARA VINCULAR DISCIPLINA
-    @GetMapping("/{id}/vincular-disciplina")
-    public String formVincularDisciplina(@PathVariable Long id, Model model) {
+    // Vincular disciplina
+    @GetMapping("/vincular/{id}")
+    public String vincularDisciplinaForm(@PathVariable Long id, Model model) {
         Turma turma = turmaService.buscarPorId(id);
         List<Disciplina> disciplinas = disciplinaService.listarTodos();
         model.addAttribute("turma", turma);
         model.addAttribute("disciplinas", disciplinas);
-        return "turma/vincular-disciplina";
+        return "turma/vincular"; // Page to select discipline
     }
 
-    // SALVAR VINCULO
-    @PostMapping("/{id}/vincular-disciplina")
-    public String vincularDisciplina(@PathVariable Long id, @RequestParam Long disciplinaId) {
-        Turma turma = turmaService.buscarPorId(id);
+    @PostMapping("/vincular")
+    public String vincularDisciplina(@RequestParam Long turmaId, @RequestParam Long disciplinaId) {
+        Turma turma = turmaService.buscarPorId(turmaId);
         Disciplina disciplina = disciplinaService.buscarPorId(disciplinaId);
 
         if (turma != null && disciplina != null) {
-            boolean exists = turma.getTurmaDisciplinas().stream()
-                    .anyMatch(td -> td.getDisciplina().equals(disciplina));
-            if (!exists) {
+            if (turma.getTurmaDisciplinas().stream().noneMatch(td -> td.getDisciplina().equals(disciplina))) {
                 TurmaDisciplina td = new TurmaDisciplina();
                 td.setTurma(turma);
                 td.setDisciplina(disciplina);
@@ -109,6 +116,7 @@ public class TurmaController {
             }
         }
 
-        return "redirect:/turma/" + id;
+        return "redirect:/turmas";
     }
+
 }
