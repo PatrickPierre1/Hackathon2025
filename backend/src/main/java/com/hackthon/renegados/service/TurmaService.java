@@ -28,4 +28,9 @@ public class TurmaService {
     public void deletarPorId(Long id) {
         turmaRepository.deleteById(id);
     }
+
+    public Turma buscarPorIdComDisciplinas(Long id) {
+        return turmaRepository.findByIdWithDisciplinas(id).orElse(null);
+    }
+
 }

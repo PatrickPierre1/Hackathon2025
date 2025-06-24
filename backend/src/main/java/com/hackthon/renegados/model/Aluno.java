@@ -14,16 +14,20 @@ import java.time.LocalDate;
 public class Aluno extends Usuario {
 
 
-    @Column(name = "ra", nullable = true) // nome da coluna
+    @Column(name = "ra", nullable = true)
     private String ra;
 
-    @Column(name = "cpf", nullable = true) // nome da coluna
+    @Column(name = "cpf", nullable = true)
     private String cpf;
 
-    @Column(name = "telefone", nullable = true) // nome da coluna
+    @Column(name = "telefone", nullable = true)
     private String telefone;
 
-    @Column(name = "email", nullable = true) // nome da coluna
+    @Column(name = "email", nullable = true)
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "turma_disciplina_id", nullable = true)
+    private TurmaDisciplina turmaDisciplina;
 
 }

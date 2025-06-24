@@ -1,16 +1,21 @@
 package com.hackthon.renegados.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class Disciplina {
 
     @Id
@@ -27,11 +32,11 @@ public class Disciplina {
     private Professor professor;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "professor_turma",
-            joinColumns = @JoinColumn(name = "professor_id"),
-            inverseJoinColumns = @JoinColumn(name = "turma_id")
-    )
-    private List<Turma> turmas;
+    @JsonIgnore
+    @OneToMany(mappedBy = "disciplina", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TurmaDisciplina> turmaDisciplinas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "disciplina", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Provas> provas = new ArrayList<>();
+
 }

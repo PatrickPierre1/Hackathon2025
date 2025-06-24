@@ -20,12 +20,8 @@ public class Turma {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @ManyToMany
     @JsonIgnore
-    @JoinTable(
-            name = "turma_disciplina",
-            joinColumns = @JoinColumn(name = "turma_id"),
-            inverseJoinColumns = @JoinColumn(name = "disciplina_id")
-    )
-    private List<Disciplina> disciplinas = new ArrayList<>();
+    @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TurmaDisciplina> turmaDisciplinas = new ArrayList<>();
+
 }

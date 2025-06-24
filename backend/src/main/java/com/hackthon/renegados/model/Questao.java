@@ -19,7 +19,6 @@ public class Questao {
     @Column(name = "resposta", nullable = false)
     private String resposta;
 
-    // Cada questão está vinculada a uma prova
     @ManyToOne
     @JoinColumn(name = "prova_id")
     private Provas prova;

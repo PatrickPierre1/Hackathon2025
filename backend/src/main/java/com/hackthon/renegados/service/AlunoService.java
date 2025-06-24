@@ -9,38 +9,50 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AlunoService{
+public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
 
-    // Listar alunos é uma lista de todos os alunos
-    public List<Aluno>  listarTodos(){ return alunoRepository.findAll(); }
+    public List<Aluno> listarTodos() {
+        return alunoRepository.findAll();
+    }
 
+    public Aluno salvar(Aluno aluno) {
+        if (aluno == null) {
+            throw new RuntimeException("Aluno não pode ser nulo.");
+        }
 
-    public Aluno salvar(Aluno aluno){
-        System.out.println("to aqui mano :"+aluno);
-        try{
-            if (aluno == null){
-                throw  new RuntimeException("errou");
+        String cpfNumerico = aluno.getCpf() != null ? aluno.getCpf().replaceAll("\\D", "") : "";
+        aluno.setPassword(new BCryptPasswordEncoder().encode(cpfNumerico));
+
+        aluno.setLogin(aluno.getRa());
+        aluno.setRole("ALUNO");
+
+        return alunoRepository.save(aluno);
+    }
+
+    public List<Aluno> salvarTodos(List<Aluno> alunos) {
+        for (Aluno aluno : alunos) {
+            if (aluno == null) {
+                throw new RuntimeException("Aluno nulo encontrado na lista.");
             }
 
-            String cpfNumerico = aluno.getCpf().replaceAll("\\D", "");
+            String cpfNumerico = aluno.getCpf() != null ? aluno.getCpf().replaceAll("\\D", "") : "";
             aluno.setPassword(new BCryptPasswordEncoder().encode(cpfNumerico));
 
             aluno.setLogin(aluno.getRa());
             aluno.setRole("ALUNO");
-
-            alunoRepository.save(aluno);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
         }
 
-        return aluno;
+        return alunoRepository.saveAll(alunos);
     }
 
-    public Aluno buscarPorId(Long id){ return alunoRepository.findById(id).orElse(null); }
+    public Aluno buscarPorId(Long id) {
+        return alunoRepository.findById(id).orElse(null);
+    }
 
-    //Remover aluno por id
-    public void deletarPorId(Long id){ alunoRepository.deleteById(id); }
+    public void deletarPorId(Long id) {
+        alunoRepository.deleteById(id);
+    }
 }

@@ -1,11 +1,7 @@
 package com.hackthon.renegados.api;
 
-import com.hackthon.renegados.model.Disciplina;
-import com.hackthon.renegados.model.Professor;
-import com.hackthon.renegados.model.Turma;
-import com.hackthon.renegados.model.Usuario;
-import com.hackthon.renegados.service.DisciplinaService;
-import com.hackthon.renegados.service.TurmaService;
+import com.hackthon.renegados.model.*;
+import com.hackthon.renegados.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
 
 @RestController
 @RequestMapping("api/turma")
@@ -28,14 +23,20 @@ public class TurmaApi {
     // DTO para Disciplina com professor
     public record DisciplinaDto(Long id, String nome, ProfessorDto professor) { }
 
-    // DTO para Turma com disciplinas (que incluem professor)
-    public record TurmaDto(Long id, String nome, List<DisciplinaDto> disciplinas) { }
+    // DTO para TurmaDisciplina (entidade intermediária)
+    public record TurmaDisciplinaDto(Long id, DisciplinaDto disciplina) { }
+
+    // DTO para Turma com lista de TurmaDisciplinaDto
+    public record TurmaDto(Long id, String nome, List<DisciplinaDto> turmaDisciplinas) { }
 
     @Autowired
     private TurmaService turmaService;
 
     @Autowired
     private DisciplinaService disciplinaService;
+
+    @Autowired
+    private TurmaDisciplinaService turmaDisciplinaService;
 
     private UsuarioDto toUsuarioDto(Usuario u) {
         if (u == null) return null;
@@ -48,19 +49,22 @@ public class TurmaApi {
     }
 
     private DisciplinaDto toDisciplinaDto(Disciplina d) {
-        return new DisciplinaDto(
-                d.getId(),
-                d.getNome(),
-                toProfessorDto(d.getProfessor())
-        );
+        if (d == null) return null;
+        return new DisciplinaDto(d.getId(), d.getNome(), toProfessorDto(d.getProfessor()));
     }
 
+    private TurmaDisciplinaDto toTurmaDisciplinaDto(TurmaDisciplina td) {
+        if (td == null) return null;
+        return new TurmaDisciplinaDto(td.getId(), toDisciplinaDto(td.getDisciplina()));
+    }
+
+
     private TurmaDto toTurmaDto(Turma t) {
-        List<DisciplinaDto> discDtos = t.getDisciplinas().stream()
-                .map(this::toDisciplinaDto)
+        List<DisciplinaDto> turmaDiscDtos = t.getTurmaDisciplinas().stream()
+                .map(td -> toDisciplinaDto(td.getDisciplina()))
                 .toList();
 
-        return new TurmaDto(t.getId(), t.getNome(), discDtos);
+        return new TurmaDto(t.getId(), t.getNome(), turmaDiscDtos);
     }
 
     // LISTAR TODOS
@@ -109,11 +113,11 @@ public class TurmaApi {
         }
     }
 
-    // VINCULAR DISCIPLINA EM UMA TURMA
+    // VINCULAR DISCIPLINA EM UMA TURMA (cria TurmaDisciplina)
     @PutMapping("/vincular-disciplina/{turmaId}/{disciplinaId}")
     public ResponseEntity<?> vincularDisciplina(@PathVariable Long turmaId, @PathVariable Long disciplinaId) {
         Turma turma = turmaService.buscarPorId(turmaId);
-            Disciplina disciplina = disciplinaService.buscarPorId(disciplinaId);
+        Disciplina disciplina = disciplinaService.buscarPorId(disciplinaId);
 
         if (turma == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -125,13 +129,17 @@ public class TurmaApi {
         }
 
         try {
-            List<Disciplina> disciplinas = turma.getDisciplinas();
-            if (!disciplinas.contains(disciplina)) {
-                disciplinas.add(disciplina);
-                turma.setDisciplinas(disciplinas);
+            // Supondo que turmaDisciplinas é List<TurmaDisciplina>
+            if (turma.getTurmaDisciplinas().stream().noneMatch(td -> td.getDisciplina().equals(disciplina))) {
+                TurmaDisciplina td = new TurmaDisciplina();
+                td.setTurma(turma);
+                td.setDisciplina(disciplina);
+                turma.getTurmaDisciplinas().add(td);
             }
 
-            Turma atualizado = turmaService.salvar(turma);
+            turmaService.salvar(turma);
+
+            Turma atualizado = turmaService.buscarPorIdComDisciplinas(turmaId);
 
             return ResponseEntity.ok(Map.of(
                     "message", "Disciplina vinculada com sucesso",

@@ -24,4 +24,9 @@ public class Provas {
 
     @OneToMany(mappedBy = "prova", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Questao> questoes;
+
+    @ManyToOne
+    @JoinColumn(name = "disciplina_id", nullable = false)
+    private Disciplina disciplina;
+
 }
