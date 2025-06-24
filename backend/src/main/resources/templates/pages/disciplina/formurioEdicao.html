@@ -1,10 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
+<body th:replace="fragments/layout :: base('Editar Disciplina – UniAlfa', ~{::main})">
+
+<main>
+    <div class="container mt-4">
+        <!-- Breadcrumb -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/disciplina/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                                📚 Disciplinas
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/disciplina/visualizar/{id}(id=${disciplina.id})}" class="text-decoration-none" style="color: #4b6cb7;">
+                                Detalhes da Disciplina
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Disciplina</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <form th:action="@{/disciplina/salvar}" method="post" th:object="${disciplina}" id="disciplinaForm">
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Nome da Disciplina -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <label class="form-label fw-semibold text-dark mb-2" for="nome">
+                        <span class="me-2">🏷️</span>Nome da Disciplina
+                    </label>
+                    <div class="input-group">
+            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+              <span class="fw-bold">📘</span>
+            </span>
+                        <input class="form-control form-control-lg border-start-0 shadow-sm"
+                               id="nome"
+                               th:field="*{nome}"
+                               type="text"
+                               placeholder="Digite o nome da disciplina"
+                               required
+                               style="border-left: 3px solid #4b6cb7;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professor Vinculado -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark mb-2" for="professor">
+                        <span class="me-2">👨‍🏫</span>Professor Responsável
+                    </label>
+                    <div class="input-group">
+            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+              <span class="fw-bold">👨‍🏫</span>
+            </span>
+                        <select class="form-select form-select-lg border-start-0 shadow-sm"
+                                id="professor"
+                                th:field="*{professor.id}"
+                                required
+                                style="border-left: 3px solid #4b6cb7;">
+                            <option value="">Selecione um professor</option>
+                            <option th:each="prof : ${professores}"
+                                    th:value="${prof.id}"
+                                    th:text="${prof.nome}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-grid gap-3 mt-5">
+                <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                        type="submit"
+                        style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
+                    <span class="me-2">💾</span>Salvar Alterações
+                </button>
+
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-secondary btn-lg flex-fill py-3"
+                       th:href="@{/disciplina/visualizar/{id}(id=${disciplina.id})}">
+                        <span class="me-2">↩️</span>Cancelar
+                    </a>
+                    <button class="btn btn-outline-warning btn-lg flex-fill py-3"
+                            type="reset">
+                        <span class="me-2">🔄</span>Restaurar Valores
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Estilo -->
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            transition: all 0.3s ease;
+        }
+
+        .input-group-text {
+            border-color: #dee2e6;
+        }
+
+        .form-control.is-invalid, .form-select.is-invalid {
+            border-color: #dc3545;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .breadcrumb-item a:hover {
+            color: #182848 !important;
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem !important;
+            }
+            .row.mb-4 {
+                margin-bottom: 1.5rem !important;
+            }
+        }
+    </style>
+</main>
 </body>
 </html>

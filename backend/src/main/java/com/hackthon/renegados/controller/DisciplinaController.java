@@ -57,7 +57,7 @@ public class DisciplinaController {
         }
         model.addAttribute("disciplina", disciplina);
         model.addAttribute("professores", professorService.listarTodos());
-        return "disciplina/formulario"; // View para editar disciplina (mesmo formulário)
+        return "pages/disciplina/formurioEdicao"; // View para editar disciplina (mesmo formulário)
     }
 
     // SALVAR (CRIAR ou ATUALIZAR)

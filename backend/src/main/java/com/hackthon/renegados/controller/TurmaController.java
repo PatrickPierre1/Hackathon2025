@@ -41,7 +41,7 @@ public class TurmaController {
     @PostMapping("/salvar")
     public String salvarTurma(@ModelAttribute Turma turma) {
         turmaService.salvar(turma);
-        return "pages/turma/listagemTurma";
+        return "redirect:/turmas/listar";
     }
 
     // Exibir formulário de edição
@@ -59,7 +59,7 @@ public class TurmaController {
     @GetMapping("/remover/{id}")
     public String removerTurma(@PathVariable Long id) {
         turmaService.deletarPorId(id);
-        return "pages/turma/listagemTurma";
+        return "redirect:/turmas/listar";
     }
 
     // Vincular disciplina
