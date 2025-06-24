@@ -1,9 +1,12 @@
 package com.hackthon.renegados.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter // Gerar o Get
@@ -12,10 +15,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Aluno extends Usuario {
 
 
-    @Column(name = "ra", nullable = true) // nome da coluna
+    @Column(name = "ra", nullable = true)
     private String ra;
 
-    @Column(name = "nome")
-    private String nome;
+    @Column(name = "cpf", nullable = true)
+    private String cpf;
+
+    @Column(name = "telefone", nullable = true)
+    private String telefone;
+
+    @Column(name = "email", nullable = true)
+    private String email;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "turma_disciplina_id", nullable = true)
+    private TurmaDisciplina turmaDisciplina;
 
 }

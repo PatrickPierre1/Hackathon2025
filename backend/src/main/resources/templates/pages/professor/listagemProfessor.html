@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Dashboard – UniAlfa', ~{::main})">
+
+<main>
+  <div class="container mt-4">
+    <!-- Header da página -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm"
+             style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+          <div class="card-body py-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h1 class="text-white mb-1 fw-bold">
+                  <i class="bi bi-mortarboard-fill me-2"></i>Gestão de Professores
+                </h1>
+                <p class="text-white-50 mb-0">Gerencie todos os professores da instituição</p>
+              </div>
+              <div>
+                <a th:href="@{/professor/abrirFormulario}"
+                   class="btn btn-warning btn-lg px-4 py-2 fw-semibold shadow-sm"
+                   style="background: #ffd43b; border: none; color: #1e7e34;">
+                  <i class="bi bi-plus-circle me-2"></i>Novo Professor
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estatísticas rápidas -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width: 60px; height: 60px; background: linear-gradient(135deg, #28a745, #1e7e34);">
+              <i class="bi bi-mortarboard text-white fs-4"></i>
+            </div>
+            <h5 class="card-title text-muted mb-1">Total de Professores</h5>
+            <h3 class="text-success fw-bold" th:text="${#lists.size(professores)}">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width: 60px; height: 60px; background: linear-gradient(135deg, #17a2b8, #138496);">
+              <i class="bi bi-person-check text-white fs-4"></i>
+            </div>
+            <h5 class="card-title text-muted mb-1">Ativos</h5>
+            <h3 class="text-info fw-bold" th:text="${#lists.size(professores)}">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width: 60px; height: 60px; background: linear-gradient(135deg, #ffc107, #e0a800);">
+              <i class="bi bi-book text-white fs-4"></i>
+            </div>
+            <h5 class="card-title text-muted mb-1">Disciplinas</h5>
+            <h3 class="text-warning fw-bold">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width: 60px; height: 60px; background: linear-gradient(135deg, #6f42c1, #563d7c);">
+              <i class="bi bi-calendar-check text-white fs-4"></i>
+            </div>
+            <h5 class="card-title text-muted mb-1">Em Atividade</h5>
+            <h3 class="text-purple fw-bold" th:text="${#lists.size(professores)}">0</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros e busca -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                  </span>
+                  <input type="text" class="form-control border-start-0"
+                         placeholder="Buscar professores por nome..."
+                         id="searchInput">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0">
+                    <i class="bi bi-at text-muted"></i>
+                  </span>
+                  <input type="text" class="form-control border-start-0"
+                         placeholder="Buscar por login..."
+                         id="searchLogin">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <button class="btn btn-outline-secondary w-100" onclick="clearFilters()">
+                  <i class="bi bi-arrow-clockwise me-1"></i>Limpar Filtros
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de professores -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-header"
+           style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 2px solid #dee2e6;">
+        <h5 class="mb-0 text-dark fw-semibold">
+          <i class="bi bi-table me-2"></i>Lista de Professores
+        </h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="professoresTable">
+            <thead style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+            <tr>
+              <th class="text-white fw-semibold border-0 py-3">
+                <i class="bi bi-hash me-1"></i>ID
+              </th>
+              <th class="text-white fw-semibold border-0 py-3">
+                <i class="bi bi-person me-1"></i>Nome
+              </th>
+              <th class="text-white fw-semibold border-0 py-3">
+                <i class="bi bi-at me-1"></i>Login
+              </th>
+              <th class="text-white fw-semibold border-0 py-3">
+                <i class="bi bi-check-circle me-1"></i>Status
+              </th>
+              <th class="text-white fw-semibold border-0 py-3 text-center">
+                <i class="bi bi-gear me-1"></i>Ações
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="professor : ${professores}"
+                class="table-row-professor align-middle">
+              <td class="py-3">
+                <span class="badge bg-light text-dark fw-semibold px-3 py-2"
+                      th:text="${professor.id}">0</span>
+              </td>
+              <td class="py-3">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-circle me-3 d-flex align-items-center justify-content-center text-white fw-bold"
+                       style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #28a745, #1e7e34);">
+                    <span th:text="${#strings.substring(professor.nome, 0, 1)}">P</span>
+                  </div>
+                  <div>
+                    <div class="fw-semibold text-dark" th:text="${professor.nome}">Nome do Professor</div>
+                    <small class="text-muted">Professor</small>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3">
+                <code class="bg-light text-dark px-2 py-1 rounded"
+                      th:text="${professor.login}">login</code>
+              </td>
+              <td class="py-3">
+                <span class="badge rounded-pill px-3 py-2 fw-semibold"
+                      style="background: linear-gradient(135deg, #28a745, #1e7e34); color: white;">
+                  <i class="bi bi-check-circle me-1"></i>Ativo
+                </span>
+              </td>
+              <td class="text-center py-3">
+                <div class="btn-group" role="group">
+                  <a th:href="@{/professor/editar/{id}(id=${professor.id})}"
+                     class="btn btn-sm btn-outline-primary px-3"
+                     data-bs-toggle="tooltip"
+                     title="Editar professor">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <a th:href="@{/professor/remover/{id}(id=${professor.id})}"
+                     class="btn btn-sm btn-outline-danger px-3"
+                     onclick="return confirm('Tem certeza que deseja excluir este professor?')"
+                     data-bs-toggle="tooltip"
+                     title="Excluir professor">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(professores)}">
+              <td colspan="5" class="text-center py-5">
+                <div class="text-muted">
+                  <i class="bi bi-mortarboard display-1 text-muted mb-3"></i>
+                  <h5>Nenhum professor cadastrado</h5>
+                  <p>Comece adicionando o primeiro professor ao sistema.</p>
+                  <a th:href="@{/professor/abrirFormulario}" class="btn btn-success">
+                    <i class="bi bi-plus-circle me-1"></i>Adicionar Professor
+                  </a>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script para funcionalidades interativas -->
+  <script>
+    // Busca em tempo real por nome
+    document.getElementById('searchInput').addEventListener('input', function() {
+        filterTable();
+    });
+
+    // Busca em tempo real por login
+    document.getElementById('searchLogin').addEventListener('input', function() {
+        filterTable();
+    });
+
+    function filterTable() {
+        const searchName = document.getElementById('searchInput').value.toLowerCase();
+        const searchLogin = document.getElementById('searchLogin').value.toLowerCase();
+        const rows = document.querySelectorAll('#professoresTable tbody tr');
+
+        rows.forEach(row => {
+            if (row.children.length > 1) {
+                const name = row.children[1].textContent.toLowerCase();
+                const login = row.children[2].textContent.toLowerCase();
+
+                let showRow = true;
+
+                // Filtro por nome
+                if (searchName && !name.includes(searchName)) {
+                    showRow = false;
+                }
+
+                // Filtro por login
+                if (searchLogin && !login.includes(searchLogin)) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        });
+    }
+
+    // Limpar filtros
+    function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('searchLogin').value = '';
+
+        const rows = document.querySelectorAll('#professoresTable tbody tr');
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+    }
+
+    // Inicializar tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+  </script>
+
+  <style>
+    .table-row-professor {
+        background-color: rgba(40, 167, 69, 0.05);
+        border-left: 4px solid #28a745;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(40, 167, 69, 0.1) !important;
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-group .btn {
+        transition: all 0.2s ease;
+    }
+
+    .btn-group .btn:hover {
+        transform: scale(1.05);
+    }
+
+    .avatar-circle {
+        transition: all 0.2s ease;
+    }
+
+    .avatar-circle:hover {
+        transform: scale(1.1);
+    }
+
+    .text-purple {
+        color: #6f42c1 !important;
+    }
+
+    .badge {
+        transition: all 0.2s ease;
+    }
+
+    .badge:hover {
+        transform: scale(1.05);
+    }
+  </style>
+</main>
+</body>
+</html>

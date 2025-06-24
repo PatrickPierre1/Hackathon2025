@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Editar Professor – UniAlfa', ~{::main})">
+
+<main>
+  <div class="container mt-4">
+    <!-- Breadcrumb -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a th:href="@{/professor/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                👨‍🏫 Professores
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              <a th:href="@{/professor/visualizar/{id}(id=${professor.id})}" class="text-decoration-none" style="color: #4b6cb7;">
+                Detalhes do Professor
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Professor</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6">
+        <div class="card border-0 shadow-lg">
+          <div class="card-header text-center py-4"
+               style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 3px solid #4b6cb7;">
+            <h4 class="mb-0 fw-semibold text-dark">
+              ✏️ Editar Professor
+            </h4>
+          </div>
+          <div class="card-body p-5">
+            <form th:action="@{/professor/salvar}" method="post" id="professorForm" th:object="${professor}">
+              <input type="hidden" th:field="*{id}" />
+
+              <!-- Campo Nome -->
+              <div class="mb-4">
+                <label class="form-label fw-semibold text-dark mb-2" for="nome">
+                  <span class="me-2">👤</span>Nome Completo
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                    <span class="fw-bold">👤</span>
+                  </span>
+                  <input class="form-control form-control-lg border-start-0 shadow-sm"
+                         id="nome"
+                         th:field="*{nome}"
+                         type="text"
+                         placeholder="Digite o nome completo do Professor"
+                         required
+                         style="border-left: 3px solid #4b6cb7;">
+                </div>
+                <div class="form-text text-muted">
+                  <small>Nome que será exibido no sistema</small>
+                </div>
+              </div>
+
+              <!-- Campo CPF -->
+              <div class="mb-4">
+                <label class="form-label fw-semibold text-dark mb-2" for="cpf">
+                  <span class="me-2">🎫</span>CPF
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                    <span class="fw-bold">🎫</span>
+                  </span>
+                  <input class="form-control form-control-lg border-start-0 shadow-sm"
+                         id="cpf"
+                         th:field="*{cpf}"
+                         type="text"
+                         placeholder="000.000.000-00"
+                         required
+                         readonly
+                         style="border-left: 3px solid #4b6cb7;">
+                </div>
+                <div class="form-text text-muted">
+                  <small>CPF não pode ser alterado após o cadastro</small>
+                </div>
+              </div>
+
+              <!-- Campo Login -->
+              <div class="mb-4">
+                <label class="form-label fw-semibold text-dark mb-2" for="login">
+                  <span class="me-2">📧</span>E-mail Institucional
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                    <span class="fw-bold">📧</span>
+                  </span>
+                  <input class="form-control form-control-lg border-start-0 shadow-sm"
+                         id="login"
+                         th:field="*{login}"
+                         type="email"
+                         placeholder="professor@unialfa.edu.br"
+                         required
+                         style="border-left: 3px solid #4b6cb7;">
+                </div>
+                <div class="form-text text-muted">
+                  <small>E-mail institucional para acesso ao sistema</small>
+                </div>
+              </div>
+
+              <!-- Campo Senha -->
+              <div class="mb-5">
+                <label class="form-label fw-semibold text-dark mb-2" for="password">
+                  <span class="me-2">🔒</span>Nova Senha (opcional)
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                    <span class="fw-bold">🔒</span>
+                  </span>
+                  <input class="form-control form-control-lg border-start-0 shadow-sm"
+                         id="password"
+                         name="password"
+                         type="password"
+                         placeholder="Deixe em branco para manter a atual"
+                         minlength="6"
+                         style="border-left: 3px solid #4b6cb7;">
+                  <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    👁️
+                  </button>
+                </div>
+                <div class="form-text text-muted">
+                  <small>Preencha apenas se desejar alterar a senha (mínimo 6 caracteres)</small>
+                </div>
+              </div>
+
+              <!-- Botões -->
+              <div class="d-grid gap-3">
+                <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                        type="submit"
+                        style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
+                  <span class="me-2">💾</span>Salvar Alterações
+                </button>
+
+                <div class="d-flex gap-2">
+                  <a class="btn btn-outline-secondary btn-lg flex-fill py-3"
+                     th:href="@{/professor/visualizar/{id}(id=${professor.id})}">
+                    <span class="me-2">↩️</span>Cancelar
+                  </a>
+                  <button class="btn btn-outline-warning btn-lg flex-fill py-3"
+                          type="reset">
+                    <span class="me-2">🔄</span>Restaurar Valores
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Card de ajuda -->
+        <div class="card border-0 shadow-sm mt-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+          <div class="card-body">
+            <h6 class="card-title text-muted mb-3">
+              💡 Informações sobre a edição
+            </h6>
+            <div class="row">
+              <div class="col-md-6">
+                <ul class="list-unstyled small text-muted">
+                  <li class="mb-2">✅ Nome pode ser alterado</li>
+                  <li class="mb-2">🔒 CPF não pode ser modificado</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <ul class="list-unstyled small text-muted">
+                  <li class="mb-2">📧 E-mail institucional editável</li>
+                  <li class="mb-2">🔐 Senha opcional para alteração</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Toggle mostrar/ocultar senha
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordField = document.getElementById('password');
+        const button = this;
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            button.innerHTML = '🙈';
+        } else {
+            passwordField.type = 'password';
+            button.innerHTML = '👁️';
+        }
+    });
+
+    // Máscara para CPF
+    document.getElementById('cpf').addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        this.value = value;
+    });
+
+    // Validação de CPF
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpf.charAt(9))) return false;
+
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) resto = 0;
+        return resto === parseInt(cpf.charAt(10));
+    }
+
+    // Validação do formulário
+    document.getElementById('professorForm').addEventListener('submit', function(e) {
+        const requiredFields = this.querySelectorAll('[required]');
+        let allValid = true;
+
+        // Validar campos obrigatórios
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                allValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+            }
+        });
+
+        // Validar CPF
+        const cpfField = document.getElementById('cpf');
+        if (cpfField.value && !validarCPF(cpfField.value)) {
+            cpfField.classList.add('is-invalid');
+            allValid = false;
+            alert('❌ CPF inválido!');
+            e.preventDefault();
+            return;
+        }
+
+        // Validar senha se preenchida
+        const passwordField = document.getElementById('password');
+        if (passwordField.value && passwordField.value.length < 6) {
+            passwordField.classList.add('is-invalid');
+            allValid = false;
+            alert('⚠️ A senha deve ter pelo menos 6 caracteres!');
+            e.preventDefault();
+            return;
+        }
+
+        if (!allValid) {
+            e.preventDefault();
+            alert('⚠️ Por favor, preencha todos os campos obrigatórios corretamente!');
+        }
+    });
+
+    // Animação suave nos campos de input
+    document.querySelectorAll('.form-control, .form-select').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.transform = 'scale(1.02)';
+            this.style.transition = 'all 0.2s ease';
+        });
+
+        input.addEventListener('blur', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+  </script>
+
+  <style>
+    .form-control:focus, .form-select:focus {
+        border-color: #4b6cb7;
+        box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .input-group-text {
+        border-color: #dee2e6;
+    }
+
+    .form-control.is-invalid, .form-select.is-invalid {
+        border-color: #dc3545;
+        animation: shake 0.5s;
+    }
+
+    .form-control.is-valid {
+        border-color: #28a745;
+    }
+
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        opacity: 1;
+        cursor: not-allowed;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .breadcrumb-item a:hover {
+        color: #182848 !important;
+    }
+
+    /* Responsividade aprimorada */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1.5rem !important;
+        }
+
+        .row.mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+    }
+  </style>
+</main>
+</body>
+</html>

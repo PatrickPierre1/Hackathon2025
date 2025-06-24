@@ -8,7 +8,8 @@
         <!-- Header da página -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);">
+                <div class="card border-0 shadow-sm"
+                     style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);">
                     <div class="card-body py-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -18,12 +19,16 @@
                                 <p class="text-white-50 mb-0">Gerencie todos os usuários do sistema</p>
                             </div>
                             <div>
-                                <a th:href="@{/usuario/abrirFormulario}"
-                                   class="btn btn-warning btn-lg px-4 py-2 fw-semibold shadow-sm"
-                                   style="background: #ffd43b; border: none; color: #182848;">
-                                    <i class="bi bi-plus-circle me-2"></i>Novo Usuário
-                                </a>
+                                <select class="form-select form-select-lg fw-semibold shadow-sm"
+                                        style="background: #ffd43b; border: none; color: #182848; width: auto; display: inline-block; padding: 0.6rem 1.2rem; font-size: 1.25rem; border-radius: 0.3rem;"
+                                        onchange="if(this.value) window.location.href = this.value;">
+                                    <option value="">➕ Novo Usuário</option>
+                                    <option value="/usuario/abrirFormulario">🛡️ Administrador</option>
+                                    <option value="/professor/abrirFormulario">👨‍🏫 Professor</option>
+                                    <option value="/aluno/abrirFormulario">👨‍🎓 Aluno</option>
+                                </select>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -120,7 +125,8 @@
 
         <!-- Tabela de usuários -->
         <div class="card border-0 shadow-sm">
-            <div class="card-header" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 2px solid #dee2e6;">
+            <div class="card-header"
+                 style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 2px solid #dee2e6;">
                 <h5 class="mb-0 text-dark fw-semibold">
                     <i class="bi bi-table me-2"></i>Lista de Usuários
                 </h5>
@@ -166,13 +172,15 @@
                                         <span th:text="${#strings.substring(usuario.nome, 0, 1)}">U</span>
                                     </div>
                                     <div>
-                                        <div class="fw-semibold text-dark" th:text="${usuario.nome}">Nome do Usuário</div>
+                                        <div class="fw-semibold text-dark" th:text="${usuario.nome}">Nome do Usuário
+                                        </div>
                                         <small class="text-muted">Membro da plataforma</small>
                                     </div>
                                 </div>
                             </td>
                             <td class="py-3">
-                                <code class="bg-light text-dark px-2 py-1 rounded" th:text="${usuario.login}">login</code>
+                                <code class="bg-light text-dark px-2 py-1 rounded"
+                                      th:text="${usuario.login}">login</code>
                             </td>
                             <td class="py-3">
                                 <span th:if="${usuario.role == 'ADMIN'}"
@@ -198,19 +206,27 @@
                             </td>
                             <td class="text-center py-3">
                                 <div class="btn-group" role="group">
-                                    <a th:href="@{/usuario/editar/{id}(id=${usuario.id})}"
+                                    <a th:href="${usuario.role == 'ADMIN'} ? @{/usuario/editar/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'PROF'} ? @{/professor/editar/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'ALUNO'} ? @{/aluno/editar/{id}(id=${usuario.id})}
+          : @{/usuario/editar/{id}(id=${usuario.id})} ))"
                                        class="btn btn-sm btn-outline-primary px-3"
                                        data-bs-toggle="tooltip"
                                        title="Editar usuário">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a th:href="@{/usuario/remover/{id}(id=${usuario.id})}"
+
+                                    <a th:href="${usuario.role == 'ADMIN'} ? @{/usuario/remover/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'PROF'} ? @{/professor/remover/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'ALUNO'} ? @{/aluno/remover/{id}(id=${usuario.id})}
+          : @{/usuario/remover/{id}(id=${usuario.id})} ))"
                                        class="btn btn-sm btn-outline-danger px-3"
                                        onclick="return confirm('Tem certeza que deseja excluir este usuário?')"
                                        data-bs-toggle="tooltip"
                                        title="Excluir usuário">
                                         <i class="bi bi-trash"></i>
                                     </a>
+
                                 </div>
                             </td>
                         </tr>

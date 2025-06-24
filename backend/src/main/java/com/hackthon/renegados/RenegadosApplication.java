@@ -28,6 +28,7 @@ public class RenegadosApplication {
 
 			usuarioRepository.save(new Usuario(
 					null,
+					"Administrador",
 					"admin",
 					new BCryptPasswordEncoder().encode("admin"),
 					"ADMIN"

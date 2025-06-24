@@ -88,6 +88,9 @@
                     <a class="nav-link" th:href="@{/aluno/listar}">Alunos</a>
                 </li>
                 <li sec:authorize="hasAnyRole('ADMIN', 'PROF')" class="nav-item">
+                    <a class="nav-link" th:href="@{/professor/listar}">Professores</a>
+                </li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'PROF')" class="nav-item">
                     <a class="nav-link" th:href="@{/disciplinas}">Disciplinas</a>
                 </li>
                 <li sec:authorize="hasAnyRole('ADMIN', 'PROF', 'ALUNO')" class="nav-item">
