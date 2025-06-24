@@ -15,4 +15,8 @@ public interface AlunoProvaRepository extends JpaRepository<AlunoProva, Long> {
 
     List<AlunoProva> findByAlunoIdAndTurmaDisciplinaId(Long alunoId, Long turmaDisciplinaId);
 
+    AlunoProva findTopByAlunoIdAndProvaIdOrderByIdDesc(Long alunoId, Long provaId);
+
+    List<AlunoProva> findAllByAlunoIdAndTurmaDisciplina_Turma_Id(Long alunoId, Long turmaId);
+
 }

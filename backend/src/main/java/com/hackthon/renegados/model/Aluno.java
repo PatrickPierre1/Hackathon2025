@@ -1,5 +1,6 @@
 package com.hackthon.renegados.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class Aluno extends Usuario {
     private String email;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "turma_disciplina_id", nullable = true)
     private TurmaDisciplina turmaDisciplina;
 
