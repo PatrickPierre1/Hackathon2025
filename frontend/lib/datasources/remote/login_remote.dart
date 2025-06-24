@@ -9,7 +9,7 @@ class LoginRemoteDataSource {
 
     // Aluno
     if (username == '12345678900' && password == '12345') {
-      return 'Aluno Fulano';
+      return 'Aluno';
     }
 
     return null;
