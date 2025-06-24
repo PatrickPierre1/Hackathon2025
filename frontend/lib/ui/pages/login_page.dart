@@ -27,24 +27,28 @@ class _LoginPageState extends State<LoginPage> {
               'Bem-vindo de volta!',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
             const SizedBox(height: 30),
 
+            // Campo de usuário
             Align(
               alignment: Alignment.centerLeft,
               child: Text("Usuário", style: TextStyle(fontWeight: FontWeight.w600)),
             ),
             const SizedBox(height: 8),
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.person),
-                    hintText: 'Digite seu usuário',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
+            TextField(
+              controller: _userController,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.person),
+                hintText: 'Digite seu usuário',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                filled: true,
+                fillColor: Colors.white,
+              ),
             ),
+
             const SizedBox(height: 20),
 
+            // Campo de senha
             Align(
               alignment: Alignment.centerLeft,
               child: Text("Senha", style: TextStyle(fontWeight: FontWeight.w600)),
@@ -57,6 +61,8 @@ class _LoginPageState extends State<LoginPage> {
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
                   icon: Icon(
+                    _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  ),
                   onPressed: () {
                     setState(() {
                       _obscurePassword = !_obscurePassword;
@@ -70,9 +76,18 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
+            const SizedBox(height: 30),
+
+            // Botão
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
+                onPressed: () {
+                  // Ação ao clicar no botão
+                  print('Usuário: ${_userController.text}');
+                  print('Senha: ${_passwordController.text}');
+                },
+                icon: const Icon(Icons.login),
                 label: const Text('Entrar no Sistema'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.indigo,
@@ -82,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+
             const SizedBox(height: 50),
 
             // Parte institucional

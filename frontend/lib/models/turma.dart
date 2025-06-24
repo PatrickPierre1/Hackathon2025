@@ -1,4 +1,4 @@
-import 'aluno.dart';
+import 'aluno_page.dart';
 
 class Turma {
   final int id;
@@ -17,4 +17,8 @@ class Turma {
       alunos: alunos,
     );
   }
+}
+
+class Aluno {
+  static fromJson(e) {}
 }

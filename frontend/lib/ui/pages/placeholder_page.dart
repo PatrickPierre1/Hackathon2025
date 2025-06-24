@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/user_preferences.dart';
-import 'package:frontend/ui/pages/login_page.dart'; // Import absoluto evita conflitos
+import 'package:frontend/ui/pages/login_page.dart';
 
 class PlaceholderPage extends StatelessWidget {
   final String username;
