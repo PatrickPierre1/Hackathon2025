@@ -55,7 +55,7 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/api/**"
-                        ).hasRole("ADMIN")
+                        ).hasAnyRole("ADMIN", "PROF")
 
                         .anyRequest().authenticated()
                 ).formLogin(login -> login
