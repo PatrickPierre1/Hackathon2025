@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/ui/pages/turma_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -91,13 +92,16 @@ class _LoginPageState extends State<LoginPage> {
                   textStyle: const TextStyle(fontSize: 16),
                 ),
                 onPressed: () {
-                  // Lógica do botão
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => TurmasPage(),
+                  ));
                 },
               ),
             ),
             const SizedBox(height: 50),
 
-            // Parte institucional
             Column(
               children: [
                 Image.asset('assets/logo.jpeg', height: 60),

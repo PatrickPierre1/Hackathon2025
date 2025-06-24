@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/ui/pages/aluno_page.dart';
+import 'package:frontend/ui/widgets/bottom_navigationbar.dart';
 import 'package:frontend/ui/widgets/custom_appbar.dart';
 import '../../datasources/remote/turma_remote.dart';
 import '../../models/turma.dart';
+import 'login_page.dart';
 
 class TurmasPage extends StatefulWidget {
   const TurmasPage({super.key});
@@ -16,6 +18,14 @@ class _TurmasPageState extends State<TurmasPage> {
   List<Turma> _turmas = [];
   List<Turma> _filteredTurmas = [];
   String _searchQuery = '';
+
+  void _logout(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => const LoginPage()
+    ));
+  }
 
   @override
   void initState() {
@@ -129,6 +139,7 @@ class _TurmasPageState extends State<TurmasPage> {
           ),
         ],
       ),
+      bottomNavigationBar: CustomBottomBar(onLogout: () => _logout(context)),
     );
   }
 }
