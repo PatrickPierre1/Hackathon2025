@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<body th:replace="fragments/layout :: base('Nova Turma – UniAlfa', ~{::main})">
+
+<main>
+    <div class="container mt-4">
+
+        <!-- Breadcrumb -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/turma/listar}" class="text-decoration-none" style="color: #4b6cb7;">
+                                🏫 Turmas
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Nova Turma</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <form th:action="@{/turmas/salvar}" method="post" th:object="${turma}" id="turmaForm">
+
+            <!-- Nome da Turma -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark mb-2" for="nome">
+                        <span class="me-2">🏷️</span>Nome da Turma
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                            🏷️
+                        </span>
+                        <input class="form-control form-control-lg border-start-0 shadow-sm"
+                               id="nome"
+                               th:field="*{nome}"
+                               type="text"
+                               placeholder="Ex: Turma A - 1º Semestre"
+                               required
+                               style="border-left: 3px solid #4b6cb7;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-grid gap-3 mt-5">
+                <button class="btn btn-lg py-3 fw-semibold shadow-sm"
+                        type="submit"
+                        style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
+                    <span class="me-2">💾</span>Cadastrar Turma
+                </button>
+
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-secondary btn-lg flex-fill py-3" th:href="@{/turma/listar}">
+                        <span class="me-2">↩️</span>Voltar à Lista
+                    </a>
+                    <button class="btn btn-outline-warning btn-lg flex-fill py-3" type="reset">
+                        <span class="me-2">🔄</span>Limpar Dados
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Validação do formulário
+        document.getElementById('turmaForm').addEventListener('submit', function (e) {
+            const nomeField = document.getElementById('nome');
+            if (!nomeField.value.trim()) {
+                nomeField.classList.add('is-invalid');
+                alert('⚠️ Por favor, preencha o nome da turma!');
+                e.preventDefault();
+            } else {
+                nomeField.classList.remove('is-invalid');
+                nomeField.classList.add('is-valid');
+            }
+        });
+
+        // Animação de foco
+        document.querySelectorAll('.form-control, .form-select').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'all 0.2s ease';
+            });
+
+            input.addEventListener('blur', function () {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+    <!-- Estilo -->
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #4b6cb7;
+            box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            animation: shake 0.5s;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem !important;
+            }
+
+            .row.mb-4 {
+                margin-bottom: 1.5rem !important;
+            }
+        }
+    </style>
+</main>
+</body>
+</html>
