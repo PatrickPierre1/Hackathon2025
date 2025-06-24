@@ -28,7 +28,7 @@ public class ProfessorController {
     @GetMapping("/abrirFormulario")
     public String abrirFormulario(Model model) {
         model.addAttribute("professor", new Professor());
-        return "/pages/professor/formulatorioCadastro";
+        return "/pages/professor/formularioCadastro";
     }
 
     // Salvar Usuário e redireciona para home

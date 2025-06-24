@@ -32,6 +32,8 @@ public class UsuarioService implements UserDetailsService {
         return repository.save(usuario);
     }
 
+
+
     public List<Usuario> listarTodos() {
         return repository.findAll();
     }
@@ -62,4 +64,7 @@ public class UsuarioService implements UserDetailsService {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
     }
 
+    public List<Usuario> listarPorRole(String role) {
+        return repository.findByRole(role);
+    }
 }

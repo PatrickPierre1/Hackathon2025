@@ -32,7 +32,7 @@
 
         <!-- Estatísticas rápidas -->
         <div class="row mb-4">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
@@ -44,39 +44,27 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
                              style="width: 60px; height: 60px; background: linear-gradient(135deg, #17a2b8, #138496);">
                             <i class="bi bi-person-check text-white fs-4"></i>
                         </div>
-                        <h5 class="card-title text-muted mb-1">Com RA</h5>
+                        <h5 class="card-title text-muted mb-1">Total de Turmas</h5>
                         <h3 class="text-info fw-bold" th:text="${#lists.size(alunos.?[ra != null and ra != ''])}">0</h3>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
                              style="width: 60px; height: 60px; background: linear-gradient(135deg, #ffc107, #e0a800);">
                             <i class="bi bi-person-x text-white fs-4"></i>
                         </div>
-                        <h5 class="card-title text-muted mb-1">Sem RA</h5>
+                        <h5 class="card-title text-muted mb-1">Total de Disciplinas</h5>
                         <h3 class="text-warning fw-bold" th:text="${#lists.size(alunos.?[ra == null or ra == ''])}">0</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-                             style="width: 60px; height: 60px; background: linear-gradient(135deg, #6f42c1, #563d7c);">
-                            <i class="bi bi-graph-up text-white fs-4"></i>
-                        </div>
-                        <h5 class="card-title text-muted mb-1">Ativos</h5>
-                        <h3 class="text-purple fw-bold" th:text="${#lists.size(alunos)}">0</h3>
                     </div>
                 </div>
             </div>
@@ -111,8 +99,8 @@
                             <div class="col-md-3">
                                 <select class="form-select" id="filterRA">
                                     <option value="">Todos os alunos</option>
-                                    <option value="com-ra">📝 Com RA</option>
-                                    <option value="sem-ra">❌ Sem RA</option>
+                                    <option value="com-ra">Turma 1</option>
+                                    <option value="sem-ra">Turma 2</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -151,7 +139,7 @@
                                 <i class="bi bi-at me-1"></i>Login
                             </th>
                             <th class="text-white fw-semibold border-0 py-3">
-                                <i class="bi bi-check-circle me-1"></i>Status
+                                <i class="bi bi-check-circle me-1"></i>Turma
                             </th>
                             <th class="text-white fw-semibold border-0 py-3 text-center">
                                 <i class="bi bi-gear me-1"></i>Ações
@@ -193,22 +181,11 @@
                                 <span th:if="${aluno.ra != null and aluno.ra != ''}"
                                       class="badge rounded-pill px-3 py-2 fw-semibold"
                                       style="background: linear-gradient(135deg, #28a745, #1e7e34); color: white;">
-                                    <i class="bi bi-check-circle me-1"></i>Matriculado
-                                </span>
-                                <span th:if="${aluno.ra == null or aluno.ra == ''}"
-                                      class="badge rounded-pill px-3 py-2 fw-semibold"
-                                      style="background: linear-gradient(135deg, #ffc107, #e0a800); color: white;">
-                                    <i class="bi bi-clock me-1"></i>Pendente
+                                    <i class="bi bi-check-circle me-1"></i>Turma Exemplo
                                 </span>
                             </td>
                             <td class="text-center py-3">
                                 <div class="btn-group" role="group">
-                                    <a th:href="@{/aluno/visualizar/{id}(id=${aluno.id})}"
-                                       class="btn btn-sm btn-outline-info px-3"
-                                       data-bs-toggle="tooltip"
-                                       title="Visualizar detalhes">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
                                     <a th:href="@{/aluno/editar/{id}(id=${aluno.id})}"
                                        class="btn btn-sm btn-outline-primary px-3"
                                        data-bs-toggle="tooltip"
@@ -256,11 +233,6 @@
             filterTable();
         });
 
-        // Filtro por status do RA
-        document.getElementById('filterRA').addEventListener('change', function() {
-            filterTable();
-        });
-
         function filterTable() {
             const searchName = document.getElementById('searchInput').value.toLowerCase();
             const searchRA = document.getElementById('searchRA').value.toLowerCase();
@@ -286,12 +258,6 @@
                         showRow = false;
                     }
 
-                    // Filtro por status do RA
-                    if (filterRA === 'com-ra' && !hasRA) {
-                        showRow = false;
-                    } else if (filterRA === 'sem-ra' && hasRA) {
-                        showRow = false;
-                    }
 
                     row.style.display = showRow ? '' : 'none';
                 }

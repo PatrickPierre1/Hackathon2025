@@ -206,19 +206,27 @@
                             </td>
                             <td class="text-center py-3">
                                 <div class="btn-group" role="group">
-                                    <a th:href="@{/usuario/editar/{id}(id=${usuario.id})}"
+                                    <a th:href="${usuario.role == 'ADMIN'} ? @{/usuario/editar/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'PROF'} ? @{/professor/editar/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'ALUNO'} ? @{/aluno/editar/{id}(id=${usuario.id})}
+          : @{/usuario/editar/{id}(id=${usuario.id})} ))"
                                        class="btn btn-sm btn-outline-primary px-3"
                                        data-bs-toggle="tooltip"
                                        title="Editar usuário">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a th:href="@{/usuario/remover/{id}(id=${usuario.id})}"
+
+                                    <a th:href="${usuario.role == 'ADMIN'} ? @{/usuario/remover/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'PROF'} ? @{/professor/remover/{id}(id=${usuario.id})}
+          : ( ${usuario.role == 'ALUNO'} ? @{/aluno/remover/{id}(id=${usuario.id})}
+          : @{/usuario/remover/{id}(id=${usuario.id})} ))"
                                        class="btn btn-sm btn-outline-danger px-3"
                                        onclick="return confirm('Tem certeza que deseja excluir este usuário?')"
                                        data-bs-toggle="tooltip"
                                        title="Excluir usuário">
                                         <i class="bi bi-trash"></i>
                                     </a>
+
                                 </div>
                             </td>
                         </tr>

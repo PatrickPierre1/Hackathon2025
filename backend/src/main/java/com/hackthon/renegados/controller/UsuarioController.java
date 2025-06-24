@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 public class                       UsuarioController {
 
     private final UsuarioService service;
-    private String rule = "ROLE_USER";
 
     public UsuarioController(UsuarioService service) {
         this.service = service;

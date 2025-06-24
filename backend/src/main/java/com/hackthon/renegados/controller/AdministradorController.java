@@ -12,13 +12,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("administrador")
 public class AdministradorController {
 
-    @Autowired
-    public AdministradorService administradorService;
-
-//    @GetMapping("/listar")
-//    public String listar(Model model) {
-//        model.addAttribute("administradores", administradorService.listarTodos());
-//        return "/pages/administrador/listagemAdministrador";
-//    }
-
 }

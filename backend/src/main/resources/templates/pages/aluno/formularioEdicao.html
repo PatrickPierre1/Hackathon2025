@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<body th:replace="fragments/layout :: base('Novo Aluno – UniAlfa', ~{::main})">
+<body th:replace="fragments/layout :: base('Editar Aluno – UniAlfa', ~{::main})">
 
 <main>
     <div class="container mt-4">
@@ -15,7 +15,7 @@
                                 👨‍🎓 Alunos
                             </a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Novo Aluno</li>
+                        <li class="breadcrumb-item active" aria-current="page">Editar Aluno</li>
                     </ol>
                 </nav>
             </div>
@@ -28,11 +28,17 @@
                     <div class="card-header text-center py-4"
                          style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 3px solid #4b6cb7;">
                         <h4 class="mb-0 fw-semibold text-dark">
-                            👨‍🎓 Dados do Aluno
+                            ✏️ Editar Dados do Aluno
                         </h4>
+                        <small class="text-muted mt-2 d-block">
+                            <span class="me-2">🎫</span>RA: <span th:text="${aluno.ra}">2024001</span>
+                        </small>
                     </div>
                     <div class="card-body p-5">
                         <form th:action="@{/aluno/salvar}" method="post" id="alunoForm" th:object="${aluno}">
+
+                            <!-- Campo hidden para ID -->
+                            <input type="hidden" th:field="*{id}" />
 
                             <!-- Seção: Dados Pessoais -->
                             <div class="mb-5">
@@ -47,9 +53,9 @@
                                             <span class="me-2">👤</span>Nome Completo
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
-                                                <span class="fw-bold">👤</span>
-                                            </span>
+                      <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                        <span class="fw-bold">👤</span>
+                      </span>
                                             <input class="form-control form-control-lg border-start-0 shadow-sm"
                                                    id="nome"
                                                    th:field="*{nome}"
@@ -69,9 +75,9 @@
                                             <span class="me-2">🎫</span>RA (Registro Acadêmico)
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
-                                                <span class="fw-bold">🎫</span>
-                                            </span>
+                      <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                        <span class="fw-bold">🎫</span>
+                      </span>
                                             <input class="form-control form-control-lg border-start-0 shadow-sm"
                                                    id="ra"
                                                    th:field="*{ra}"
@@ -93,12 +99,12 @@
                                             <span class="me-2">📋</span>CPF
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
-                                                <span class="fw-bold">📋</span>
-                                            </span>
+                      <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                        <span class="fw-bold">📋</span>
+                      </span>
                                             <input class="form-control form-control-lg border-start-0 shadow-sm"
                                                    id="cpf"
-                                                   name="cpf"
+                                                   th:field="*{cpf}"
                                                    type="text"
                                                    placeholder="000.000.000-00"
                                                    maxlength="14"
@@ -112,12 +118,12 @@
                                             <span class="me-2">📞</span>Telefone
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
-                                                <span class="fw-bold">📞</span>
-                                            </span>
+                      <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                        <span class="fw-bold">📞</span>
+                      </span>
                                             <input class="form-control form-control-lg border-start-0 shadow-sm"
                                                    id="telefone"
-                                                   name="telefone"
+                                                   th:field="*{telefone}"
                                                    type="tel"
                                                    placeholder="(00) 00000-0000"
                                                    maxlength="15"
@@ -133,12 +139,12 @@
                                             <span class="me-2">📧</span>E-mail
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
-                                                <span class="fw-bold">📧</span>
-                                            </span>
+                      <span class="input-group-text bg-light border-end-0" style="color: #4b6cb7;">
+                        <span class="fw-bold">📧</span>
+                      </span>
                                             <input class="form-control form-control-lg border-start-0 shadow-sm"
                                                    id="email"
-                                                   name="email"
+                                                   th:field="*{email}"
                                                    type="email"
                                                    placeholder="aluno@email.com"
                                                    style="border-left: 3px solid #4b6cb7;">
@@ -154,8 +160,9 @@
                             <div class="d-grid gap-3">
                                 <button class="btn btn-lg py-3 fw-semibold shadow-sm"
                                         type="submit"
+                                        id="btnSalvar"
                                         style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); border: none; color: white;">
-                                    <span class="me-2">💾</span>Cadastrar Aluno
+                                    <span class="me-2">💾</span>Salvar Alterações
                                 </button>
 
                                 <div class="d-flex gap-2">
@@ -163,9 +170,10 @@
                                        th:href="@{/aluno/listar}">
                                         <span class="me-2">↩️</span>Voltar à Lista
                                     </a>
-                                    <button class="btn btn-outline-warning btn-lg flex-fill py-3"
-                                            type="reset">
-                                        <span class="me-2">🔄</span>Limpar Dados
+                                    <button class="btn btn-outline-info btn-lg flex-fill py-3"
+                                            type="button"
+                                            onclick="resetarFormulario()">
+                                        <span class="me-2">🔄</span>Restaurar Dados
                                     </button>
                                 </div>
                             </div>
@@ -173,28 +181,28 @@
                     </div>
                 </div>
 
-                <!-- Card de ajuda -->
-                <div class="card border-0 shadow-sm mt-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+                <!-- Card de informações importantes -->
+                <div class="card border-0 shadow-sm mt-4" style="background: linear-gradient(135deg, #fff3cd 0%, #ffffff 100%); border-left: 4px solid #ffc107 !important;">
                     <div class="card-body">
-                        <h6 class="card-title text-muted mb-3">
-                            💡 Dicas para um cadastro completo
+                        <h6 class="card-title text-warning mb-3">
+                            ⚠️ Informações importantes sobre a edição
                         </h6>
                         <div class="row">
                             <div class="col-md-4">
                                 <ul class="list-unstyled small text-muted">
-                                    <li class="mb-2">✅ Preencha os dados pessoais corretamente</li>
-                                    <li class="mb-2">🎫 RA deve ser único para cada aluno</li>
+                                    <li class="mb-2">🔒 RA não pode ser alterado</li>
                                 </ul>
                             </div>
                             <div class="col-md-4">
                                 <ul class="list-unstyled small text-muted">
-                                    <li class="mb-2">🔒 Senha será o CPF do Aluno</li>
-                                    <li class="mb-2">👤 Login será o RA do Aluno</li>
+                                    <li class="mb-2">🔄 Use "Restaurar" para desfazer alterações</li>
+                                    <li class="mb-2">💾 Salve para confirmar as mudanças</li>
                                 </ul>
                             </div>
                             <div class="col-md-4">
                                 <ul class="list-unstyled small text-muted">
-                                    <li class="mb-2">📧 E-mail válido para comunicações</li>
+                                    <li class="mb-2">📊 Alterar o CPF altera a senha do Aluno</li>
+                                    <li class="mb-2">📧 E-mail deve ser válido para comunicações</li>
                                 </ul>
                             </div>
                         </div>
@@ -206,24 +214,92 @@
 
     <!-- Scripts -->
     <script>
-        // Toggle mostrar/ocultar senha
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordField = document.getElementById('password');
-            const button = this;
+        // Armazenar dados originais para restauração
+        let dadosOriginais = {};
 
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                button.innerHTML = '🙈';
-            } else {
-                passwordField.type = 'password';
-                button.innerHTML = '👁️';
+        // Capturar dados originais quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('alunoForm');
+            const formData = new FormData(form);
+
+            for (let [key, value] of formData.entries()) {
+                dadosOriginais[key] = value;
             }
+
+            // Também capturar valores dos selects
+            const selects = form.querySelectorAll('select');
+            selects.forEach(select => {
+                dadosOriginais[select.name] = select.value;
+            });
+
+            // Aplicar máscaras após carregar os dados
+            aplicarMascaras();
         });
 
-        // Validação em tempo real do login (remover espaços)
-        document.getElementById('login').addEventListener('input', function() {
-            this.value = this.value.replace(/\s/g, '').toLowerCase();
-        });
+        // Função para restaurar dados originais
+        function resetarFormulario() {
+            if (confirm('⚠️ Tem certeza que deseja restaurar os dados originais? Todas as alterações não salvas serão perdidas.')) {
+                for (let [name, value] of Object.entries(dadosOriginais)) {
+                    const field = document.querySelector(`[name="${name}"]`);
+                    if (field) {
+                        field.value = value;
+                        field.classList.remove('is-invalid', 'is-valid');
+                    }
+                }
+
+                // Aplicar máscaras novamente
+                aplicarMascaras();
+
+                // Feedback visual
+                const toast = document.createElement('div');
+                toast.className = 'toast align-items-center text-white bg-info border-0 position-fixed top-0 end-0 m-3';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            🔄 Dados restaurados com sucesso!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+
+                // Mostrar toast
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+
+                // Remover após 5 segundos
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 5000);
+            }
+        }
+
+        // Função para aplicar máscaras
+        function aplicarMascaras() {
+            // CPF
+            const cpfField = document.getElementById('cpf');
+            if (cpfField && cpfField.value) {
+                let value = cpfField.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                cpfField.value = value;
+            }
+
+            // Telefone
+            const telefoneField = document.getElementById('telefone');
+            if (telefoneField && telefoneField.value) {
+                let value = telefoneField.value.replace(/\D/g, '');
+                if (value.length <= 11) {
+                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                }
+                telefoneField.value = value;
+            }
+        }
 
         // Máscara para CPF
         document.getElementById('cpf').addEventListener('input', function() {
@@ -266,7 +342,43 @@
             return resto === parseInt(cpf.charAt(10));
         }
 
-        // Efeito de validação visual
+        // Detectar alterações no formulário
+        function detectarAlteracoes() {
+            const form = document.getElementById('alunoForm');
+            const campos = form.querySelectorAll('input:not([readonly]):not([type="hidden"]), select');
+            let alterado = false;
+
+            campos.forEach(campo => {
+                const valorOriginal = dadosOriginais[campo.name] || '';
+                const valorAtual = campo.value || '';
+
+                if (valorOriginal !== valorAtual) {
+                    alterado = true;
+                }
+            });
+
+            // Atualizar visual do botão salvar
+            const btnSalvar = document.getElementById('btnSalvar');
+            if (alterado) {
+                btnSalvar.innerHTML = '<span class="me-2">💾</span>Salvar Alterações *';
+                btnSalvar.style.background = 'linear-gradient(135deg, #28a745 0%, #155724 100%)';
+            } else {
+                btnSalvar.innerHTML = '<span class="me-2">💾</span>Salvar Alterações';
+                btnSalvar.style.background = 'linear-gradient(135deg, #4b6cb7 0%, #182848 100%)';
+            }
+        }
+
+        // Monitorar mudanças em todos os campos
+        document.addEventListener('DOMContentLoaded', function() {
+            const campos = document.querySelectorAll('input:not([readonly]):not([type="hidden"]), select');
+
+            campos.forEach(campo => {
+                campo.addEventListener('input', detectarAlteracoes);
+                campo.addEventListener('change', detectarAlteracoes);
+            });
+        });
+
+        // Validação do formulário
         document.getElementById('alunoForm').addEventListener('submit', function(e) {
             const requiredFields = this.querySelectorAll('[required]');
             let allValid = true;
@@ -305,7 +417,28 @@
             if (!allValid) {
                 e.preventDefault();
                 alert('⚠️ Por favor, preencha todos os campos obrigatórios corretamente!');
+            } else {
+                // Confirmar salvamento
+                if (!confirm('💾 Deseja salvar as alterações realizadas?')) {
+                    e.preventDefault();
+                }
             }
+        });
+
+        // Aviso ao sair da página sem salvar
+        window.addEventListener('beforeunload', function(e) {
+            const form = document.getElementById('alunoForm');
+            const campos = form.querySelectorAll('input:not([readonly]):not([type="hidden"]), select');
+            let alterado = false;
+
+            campos.forEach(campo => {
+                const valorOriginal = dadosOriginais[campo.name] || '';
+                const valorAtual = campo.value || '';
+
+                if (valorOriginal !== valorAtual) {
+                    alterado = true;
+                }
+            });
         });
 
         // Animação suave nos campos de input
@@ -349,6 +482,11 @@
             border-color: #28a745;
         }
 
+        .form-control[readonly] {
+            background-color: #f8f9fa !important;
+            opacity: 0.8;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -380,6 +518,12 @@
             border-radius: 2px;
         }
 
+        /* Indicador de campo alterado */
+        .form-control.alterado {
+            border-left-color: #ffc107 !important;
+            border-left-width: 4px !important;
+        }
+
         /* Responsividade aprimorada */
         @media (max-width: 768px) {
             .card-body {
@@ -393,6 +537,12 @@
             .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-8 {
                 margin-bottom: 1rem;
             }
+        }
+
+        /* Toast personalizado */
+        .toast {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
     </style>
 </main>
